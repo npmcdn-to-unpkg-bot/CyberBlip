@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>468</x>
+      <y>72</y>
+      <w>126</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>
+CyberBlip
+&lt;&lt;Application&gt;&gt;
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>204</y>
+      <w>108</w>
+      <h>78</h>
+    </coordinates>
+    <panel_attributes>WebController
+&lt;&lt;Controller&gt;&gt;
+--
+
+-service : WebService
+-view : WebView
+--
+
++executeChoice() : void
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>204</y>
+      <w>138</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>IController
+&lt;&lt;Interface&gt;&gt;
+--
+
++executeChoice() : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>210</y>
+      <w>60</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>612</x>
+      <y>144</y>
+      <w>120</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>WebService
+&lt;&lt;Service&gt;&gt;
+--
+
+-dao : WebDao
+--
+
++getAttacks() : List&lt;Map&gt;
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>318</x>
+      <y>324</y>
+      <w>252</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>WebView
+&lt;&lt;View&gt;&gt;
+--
+
++provideAccess() : void
++drawAttack(attacker_lon : Double, attacker_lat : Double,
+            target_lon : Double, target_lat : Double) : void
+-drawBlip(lon : Double, lat : Double) : void
+-drawArrowAnimation(lon_a : Double, lat_a : Double, 
+                    lon_b : Double, lat_b : Double) : void
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>138</x>
+      <y>324</y>
+      <w>138</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>IView
+&lt;&lt;Interface&gt;&gt;
+--
+
++provideAccess() : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>330</y>
+      <w>60</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>144</y>
+      <w>138</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Observer
+&lt;&lt;Abstract&gt;&gt;
+--
+
++update() : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>432</x>
+      <y>150</y>
+      <w>72</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>138</x>
+      <y>402</y>
+      <w>138</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Observable
+&lt;&lt;Abstract&gt;&gt;
+--
+
+-state : String
+-observers : List&lt;Observer&gt;
+--
+
++attach(o : Observer) : void
++detach(o : Observer) : void
++setState(state : String) : void
++getState() : String
+-notify() : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>408</y>
+      <w>60</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>0</x>
+      <y>486</y>
+      <w>108</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>for all o in observers{
+	o.update()
+}
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>102</x>
+      <y>504</y>
+      <w>48</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>762</x>
+      <y>144</y>
+      <w>90</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>WebDao
+&lt;&lt;DAO&gt;&gt;
+--
+
+dao : GenericDao
+--
+
++list() : List&lt;Map&gt;
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>174</y>
+      <w>216</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>GenericDAO&lt;IDType, T extends Serializable&gt;
+&lt;&lt;Interface&gt;&gt;
+--
+
++add(id : IDType, entity : T) : void
++update(id : IDType, entity : T) : void
++remove(id : IDType, entity : T) : void
++find(id : IDType) : T
++list() : List&lt;T&gt;
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>888</x>
+      <y>300</y>
+      <w>216</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>JdbcDao&lt;IDType, T extends Serializable&gt;
+&lt;&lt;DAO&gt;&gt;
+--
+
++add(id : IDType, entity : T) : void
++update(id : IDType, entity : T) : void
++remove(id : IDType, entity : T) : void
++find(id : IDType) : T
++list() : List&lt;T&gt;
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>990</x>
+      <y>258</y>
+      <w>18</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>564</x>
+      <y>150</y>
+      <w>60</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>522</x>
+      <y>276</y>
+      <w>18</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>726</x>
+      <y>150</y>
+      <w>48</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>846</x>
+      <y>150</y>
+      <w>156</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;240.0;10.0;240.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>594</x>
+      <y>360</y>
+      <w>246</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>AttackFactory
+&lt;&lt;Factory&gt;&gt;
+--
+
++createAttack
+             (attacker_ip : String, target_ip : String,
+              service : String, port : int, time : Date) : Attack
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>582</x>
+      <y>234</y>
+      <w>144</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>220.0;210.0;220.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1014</x>
+      <y>474</y>
+      <w>126</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Location
+&lt;&lt;Domain&gt;&gt;
+--
+
+-street_name : String
+-street_num : String
+-city : String
+-state : String
+-country : String
+-longitude : Double
+-latitude : Double
+--
+
++getLongitude() : Double
++getLatitude() : Double
+...
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>522</x>
+      <y>492</y>
+      <w>126</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>AttackType
+&lt;&lt;Domain&gt;&gt;
+--
+
+-service : String
+-description : String
+--
+
++getService() : String
++getDescription() : String
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>852</x>
+      <y>432</y>
+      <w>126</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>Attacker
+&lt;&lt;Domain&gt;&gt;
+--
+
+-ip : String
+-organization : String
+-location : Location
+--
+
++getIp() : String
++getOrganization() : String
++getLocation() : Location
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>648</x>
+      <y>594</y>
+      <w>138</w>
+      <h>138</h>
+    </coordinates>
+    <panel_attributes>Attack
+&lt;&lt;Domain&gt;&gt;
+--
+
+-attacker : Attacker
+-target : Target
+-type : AttackType
+-timestamp : Date
+-port : int
+--
+
++getAttacker() : Attacker
++getTarget() : Target
++getAttackType() : AttackType
+...
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>606</x>
+      <y>420</y>
+      <w>18</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>834</x>
+      <y>390</y>
+      <w>60</w>
+      <h>54</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>80.0;70.0;80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>714</x>
+      <y>420</y>
+      <w>18</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;290.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>642</x>
+      <y>546</y>
+      <w>48</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>60.0;80.0;60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>738</x>
+      <y>510</y>
+      <w>126</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>852</x>
+      <y>558</y>
+      <w>126</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Target
+&lt;&lt;Domain&gt;&gt;
+--
+
+-server_name : String
+-location : Location
+--
+
++getServerName() : String
++getLocation() : Location
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>972</x>
+      <y>480</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>972</x>
+      <y>564</y>
+      <w>54</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>756</x>
+      <y>564</y>
+      <w>108</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0;160.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>420</y>
+      <w>54</w>
+      <h>216</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>70.0;340.0;10.0;340.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>522</x>
+      <y>114</y>
+      <w>18</w>
+      <h>102</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+</diagram>
