@@ -51,7 +51,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'cyberblip_old.urls'
+ROOT_URLCONF = 'cyberblip.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cyberblip_old.wsgi.application'
+WSGI_APPLICATION = 'cyberblip.wsgi.application'
 
 
 # Database
