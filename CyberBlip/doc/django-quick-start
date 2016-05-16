@@ -1,0 +1,55 @@
+INSTALL PYTHON 3
+
+Should already be installed on linux, if not go to the python website and download and install it.
+
+INSTALL PIP3
+
+$ sudo apt-get install python3-pip
+
+
+SETUP VIRUALENVIRONMENT FOR DEVELOPMENT
+
+$ sudo apt-get install virtualenv
+	- installs virtualenv
+	
+$ virtualenv venv
+	- places a new virtualenv in a new directory called 'venv'
+	
+$ cd venv 
+	- change directory into venv
+	
+$ source bin/activate
+	- activate the virtualenv
+	- shell prompt should show that you are in the venv now with a display to the left saying '(venv)'
+	
+	To exit the virtualenv:
+
+		$ deactivate
+			- deactivates the virtualenv, bringing you back to your normal environment
+		
+		
+SETUP DJANGO FOR DEVELOPMENT
+
+While in the virtualenv directory with the virtualenv activated...
+
+$ pip install Django
+	- installs the Django framework
+	
+$ django-admin startproject mysite
+	- creates a Django project
+
+$ cd mysite
+	- change directories into the your new Django project
+	
+$ python manage.py runserver
+	- runs a local server that your new project is on(it may show a warning saying you have unapplied migrations, ignore this)
+	
+Open a web browser and navigate to "http://127.0.0.1:8000", you should see a welcome page which means that Django is set up and working!
+	
+
+
+
+	
+
+	
+	
