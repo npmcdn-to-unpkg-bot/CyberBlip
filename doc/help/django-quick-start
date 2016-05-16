@@ -1,12 +1,19 @@
+THIS IS A DEVELOPERS QUICKSTART GUIDE FOR SETTING UP A DJANGO WORK ENVIRONMENT WITH GIT
+
+FOR DETAILED DOCUMENTATION ON HOW TO USE DJANGO	: https://docs.djangoproject.com/en/1.9/
+
+FOR DETAILED DOCUMENTATION ON HOW TO USE GIT	: https://git-scm.com/documentation
+
+---------------------------------------------------------------------------------------------------
+
 INSTALL PYTHON 3
 
-Should already be installed on linux, if not go to the python website and download and install it.
-
+Should already be installed on linux, if not go download it here: https://www.python.org/downloads/
+----------------------------------------------------------------------------------------------------
 INSTALL PIP3
 
 $ sudo apt-get install python3-pip
-
-
+----------------------------------------------------------------------------------------------------
 SETUP VIRUALENVIRONMENT FOR DEVELOPMENT
 
 $ sudo apt-get install virtualenv
@@ -15,10 +22,7 @@ $ sudo apt-get install virtualenv
 $ virtualenv venv
 	- places a new virtualenv in a new directory called 'venv'
 	
-$ cd venv 
-	- change directory into venv
-	
-$ source bin/activate
+$ source venv/bin/activate
 	- activate the virtualenv
 	- shell prompt should show that you are in the venv now with a display to the left saying '(venv)'
 	
@@ -27,14 +31,124 @@ $ source bin/activate
 		$ deactivate
 			- deactivates the virtualenv, bringing you back to your normal environment
 		
-		
-SETUP DJANGO FOR DEVELOPMENT
+----------------------------------------------------------------------------------------------------		
+SETTING UP AN EXISTING PROJECT FOR LOCAL DEVELOPMENT
 
-While in the virtualenv directory with the virtualenv activated...
+While the virtualenv is activated...
+
+$ git clone <address-of-git-repository>
+	- clones the git repo to your local machine
+	
+$ cd <name-of-cloned-project>
+	- go into the cloned projects root directory
+	
+$ pip install -r requirements.txt
+	- installs all dependencies for the project
+	
+IMPORTANT: 
+	- The settings.py file of the cyberblip django project containts a 'SECRET_KEY' field. This is currently set to look for a file at /etc/django_secret_key.txt
+	- You need to create the file 'django_secret_key.txt' on your local machine and type in a random secret key for you to use. This file needs to be saved in /etc.
+	- Don't share this secret key with anyone
+
+You can now use what ever IDE you'd like, I'd recommend Pycharm.
+
+-----------------------------------------------------------------------------------------------------
+SETTING UP PYCHARM WITH THE CLONED PROJECT
+
+If you dont have pycharm installed, you can download the community edition here: https://www.jetbrains.com/pycharm/download/#section=linux
+
+Open Pycharm
+Select File > Open
+Navigate to the project directory you cloned from git
+Select it and press OK
+
+Select File > Settings > Project:... > Project Interpreter
+Click the gear simple in the upper right next to the drop down interpreter menu
+Select 'Add local'
+Navigate to the virtual environment directory you created
+Navigate into the /bin directory within your virtual environment directory
+Select 'python3'
+Press 'Ok'
+
+You can now edit the project using pycharm and the python3 interpreter from the virtual environment you created
+------------------------------------------------------------------------------------------------------
+USING GIT WITH PYCHARM
+
+To pull from remote repo:
+
+	- from the toolbar select VCS > Git > Pull
+	- The root and remote branches should already be correct if you followed the above steps with cloning the project and opening with pycharm
+	- Select the remote branches you wish to merge with your local branch
+	- Select pull
+	
+To add a new file to be tracked by git:
+
+	- right click the file in the project explorer
+	- select git > add
+	
+To commit changes:
+
+	- from the toolbar select VCS > Commit changes
+	- select the files you wish to commit and type in a commit message
+	- select Commit
+	
+To push changes:
+
+	- from the toolbar select VCS > Git > Push
+	- make sure the correct branches are shown
+		- It is in the form "localbranch -> remoterepo : remotebranch"
+		- For you it should probably say "master -> origin : master"
+	- select Push
+	
+------------------------------------------------------------------------------------------------------
+USING GIT WITH THE COMMAND LINE
+
+To pull from remote repo:
+
+	- git pull <remote-branch> <local-branch>
+
+To add a new file to be tracked by git:
+
+	- git add <filename> 
+	
+To commit changes:
+
+	- stage any changes you wish to commit by using git add
+	- git commit -m "<commit message here>"
+	
+	- alternatively, you can automatically stage all modified files and commit them with the following command. 
+	- git commit -a -m "<commit message here>"
+	- Newly created files will still have to be manually added using git add however.
+
+To push changes:
+	
+	- git push <remote-branch> <local-branch>
+	
+-------------------------------------------------------------------------------------------------------	
+ADDING TO THE REQUIREMENTS FILE
+
+The requirements.txt file contains a list of all the packages required for the project. Any time you add a new package for the project to use you should add it to the requirements.txt file. You can either input this manually or simply do the following command while in the projects root directory.
+
+$ pip freeze > requirements.txt
+
+This will write all the packages that need to be installed to the file requirements.txt
+
+Any time you pull from github you should probably make sure you have all the necessary dependencies installed.
+
+$ pip install -r requirements.txt
+
+This will install all the packages within the requirements.txt file.
+
+----------------------------------------------------------------------------------------------------------
+SETING UP A NEW DJANGO PROJECT FOR DEVELOPMENT
+
+While the virtualenv is activated...
 
 $ pip install Django
 	- installs the Django framework
 	
+Navigate to the directory you wish to create a django project in
+
 $ django-admin startproject mysite
 	- creates a Django project
 
@@ -45,11 +159,31 @@ $ python manage.py runserver
 	- runs a local server that your new project is on(it may show a warning saying you have unapplied migrations, ignore this)
 	
 Open a web browser and navigate to "http://127.0.0.1:8000", you should see a welcome page which means that Django is set up and working!
-	
 
+-----------------------------------------------------------------------------------------------------------------------------
+TO SET UP THE NEW DJANGO PROJECT UNDER GIT
 
+Navigate into the project directory
 
-	
+$ git init
+$ git add .
+$ git commit -m "first commit"
 
-	
-	
+Create a new repository on github
+Copy the project link and paste it into the next command
+
+$ git remote add origin <repolink>
+$ git push origin master
+
+Enter your github credentials when prompted
+
+Your new django project should be set up with git now, check it out on github!
+
+------------------------------------------------------------------------------------------------------------------------------
+CREATEING A NEW APP
+
+Navigate to the root directory of your Django project(where the manage.py file is located), then execute the following command
+
+python manage.py startapp <app-name-here>
+ 
+------------------------------------------------------------------------------------------------------------------------------
