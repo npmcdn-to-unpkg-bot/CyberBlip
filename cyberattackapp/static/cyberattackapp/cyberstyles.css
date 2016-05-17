@@ -1,3 +1,8 @@
+path {
+    color: dodgerblue;
+    outline-color: dodgerblue;
+    fill: red;
+}
 svg {
-    background-color: blueviolet;
+    background-color: black;
 }
