@@ -2,19 +2,25 @@
 <html>
 <body>
     <div>
-        <table border="1">
+        <table id="attack_table">
             <thead>
                 <tr>
-                    <th class="basetableheader" colspan="2">Attacks</th>
+                    <th class="basetableheader" colspan="4">Attacks</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>
+                        {% include 'cyberattackapp/timestamp_table.html' %}
+                    </td>
+                    <td>
                         {% include 'cyberattackapp/attack_table.html' %}
                     </td>
                     <td>
                         {% include 'cyberattackapp/target_table.html' %}
+                    </td>
+                    <td>
+                        {% include 'cyberattackapp/type_table.html' %}
                     </td>
                 </tr>
             </tbody>

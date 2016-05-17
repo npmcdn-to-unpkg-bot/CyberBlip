@@ -1,11 +1,11 @@
 body {
-    background: #00001a;
+    background-color: #1d2424;
     font-family: serif;
     font-size: 12px;
     color: #FFFFFF;
 }
 path {
-    fill: #00001a;
+    fill: #1d2424;
     stroke-width: 3;
     stroke: #FFFFFF;
 }
@@ -22,12 +22,21 @@ path {
     left: 0;
     width: 50%;
 }
+#attack_table {
+    border-style: double;
+    border-width: 5px;
+    border-radius: 25px;
+}
 .basetableheader {
     font-size: 25px;
     font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .subtableheader {
     font-size: 18px;
+    border-bottom: none;
+    padding-bottom: 10px
 }
 table {
     width: 100%;
@@ -38,4 +47,5 @@ th {
 }
 td {
     text-align: center;
+    padding-top: 5px;
 }
