@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <div>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th colspan="2">Attacks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        {% include 'cyberattackapp/attack_table.html' %}
+                    </td>
+                    <td>
+                        {% include 'cyberattackapp/target_table.html' %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

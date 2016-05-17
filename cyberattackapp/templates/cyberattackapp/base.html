@@ -7,9 +7,12 @@
     <title>cyberattackapp</title>
 </head>
 <body>
-    <div id=cybermap>
-        {% block content %}
-        {% endblock %}
+    <div id="cybermap">
+        {% include 'cyberattackapp/maine.svg' %}
     </div>
+    <div id="attacks">
+        {% include 'cyberattackapp/attacks.html' %}
+    </div>
+    
 </body>
 </html>

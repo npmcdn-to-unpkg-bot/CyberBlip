@@ -1,6 +1,4 @@
-{% extends "cyberattackapp/base.html" %}
-{% block content %}
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="800px" viewBox="0 0 790 1178" enable-background="new 0 0 790 1178" xml:space="preserve" preserveAspectRatio="xMaxYMin meet">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="790px" y="0px" width="100%" height="650px" viewBox="0 0 790 1150" enable-background="new 0 0 790 1150" xml:space="preserve">
     <g id="Waldo_County">
         <path fill-rule="evenodd" clip-rule="evenodd" fill="#C1C1C1" 
             d="M330.958,725.909c3.056-0.723,3.644,1.022,6,1
@@ -303,5 +301,4 @@
             c-1.373-29.25,4.987-60.155,0.999-89.988c-19.359-0.997-45.652-1.845-67.991-3C435.945,280.965,435.945,265.967,435.945,250.969z"
             />
     </g>
-    </svg>
-{% endblock %}
+</svg>

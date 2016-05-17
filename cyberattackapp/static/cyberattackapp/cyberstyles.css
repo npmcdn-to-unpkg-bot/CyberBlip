@@ -1,8 +1,29 @@
-path {
-    color: dodgerblue;
-    outline-color: dodgerblue;
-    fill: cyan;
+body {
+    background: #00001a;
+    font-family: serif;
+    font-size: 12;
+    color: #FFFFFF;
 }
-svg {
-    background-color: black;
+path {
+    fill: #00001a;
+    stroke-width: 3;
+    stroke: #FFFFFF;
+}
+#cybermap {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+#attacks {
+    position: absolute;
+    bottom: 0;
+}
+th {
+    padding: 10px;
+}
+td {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top:5px;
+    padding-bottom:5px
 }
