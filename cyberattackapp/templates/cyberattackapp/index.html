@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=10; IE=9; IE=8; IE=7; IE=EDGE"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CyberAttack App</title>
+    {% load staticfiles %}
+    <link href="{% static "cyberattackapp/css/components/frames/frame_root.css" %}" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="{% static "cyberattackapp/js/components/component.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/buttons/button.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/maps/map.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/maps/map_google.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/frames/frame.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/frames/frame_root.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/main.js" %}"></script>
 </head>
 <body>
-
+    <div id="map"></div>
 </body>
 </html>

@@ -1,6 +1,5 @@
 function Table(selector) {
     Component.call(this, selector);
-    this.selector = selector;
     this.header = selector.find("thead");
     this.body = selector.find("tbody");
 }
