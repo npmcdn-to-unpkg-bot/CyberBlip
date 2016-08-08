@@ -12,22 +12,16 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 import sys
+from .secrets import SECRETS
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_FILE = BASE_DIR + '/secret_file.txt'
-
-secrets = dict()
-with open(SECRET_FILE, 'r') as secret_file:
-    for line in secret_file:
-        line = line.strip().split('=', 1)
-        secrets[line[0]] = line[1]
-
-if not all(k in secrets for k in ['SECRET_KEY']):
-    print ('You need to create a secret file!')
+if not all(k in SECRETS for k in ['SECRET_KEY', 'ACCESS_TOKEN']):
+    print('You need to create a secret file!')
     sys.exit(1)
 
-SECRET_KEY = secrets['SECRET_KEY']
+SECRET_KEY = SECRETS['SECRET_KEY']
+ACCESS_TOKEN = SECRETS['ACCESS_TOKEN']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
