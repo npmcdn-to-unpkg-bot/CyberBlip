@@ -11,18 +11,27 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+SECRET_FILE = BASE_DIR + '/secret_file.txt'
 
+secrets = dict()
+with open(SECRET_FILE, 'r') as secret_file:
+    for line in secret_file:
+        line = line.strip().split('=', 1)
+        secrets[line[0]] = line[1]
+
+if not all(k in secrets for k in ['SECRET_KEY']):
+    print ('You need to create a secret file!')
+    sys.exit(1)
+
+SECRET_KEY = secrets['SECRET_KEY']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open("/etc/django_secret_key.txt") as f:
-    SECRET_KEY = f.read().strip()
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

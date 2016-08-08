@@ -1,6 +1,7 @@
 from django.conf.urls import url
-from . import views
+from .views import CyberAttackView
+
 
 urlpatterns = [
-    url(r'^$',views.index, name='index')
+    url(r'^$', CyberAttackView.as_view(), name='cyber_attack_view')
 ]
