@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CyberAttack App</title>
     {% load staticfiles %}
+    <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
     <link href="{% static "cyberattackapp/css/components/frames/frame_root.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/main.css" %}" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js"></script>
-    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
     <script src="{% static "cyberattackapp/js/components/component.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/buttons/button.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/maps/map.js" %}"></script>
-    <script src="{% static "cyberattackapp/js/components/widgets/maps/map_google.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/maps/map_leaflet.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/tables/table.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame_root.js" %}"></script>
