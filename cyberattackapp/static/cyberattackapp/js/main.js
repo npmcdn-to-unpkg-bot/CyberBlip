@@ -1,3 +1,9 @@
 $(document).ready(function () {
-    new FrameRoot($("body")).init();
+    $.get('configuration/', function (data) {
+        window.configs = JSON.parse(data);
+    }).done(
+        function () {
+            new FrameRoot($("body")).init();
+        }
+    );
 });
