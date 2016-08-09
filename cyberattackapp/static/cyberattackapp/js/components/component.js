@@ -6,10 +6,10 @@ Component.prototype.init = function () {
     /* do nothing */
 };
 Component.prototype.show = function () {
-    this.selector.show();
+    this.selector.removeClass('hidden');
 };
 Component.prototype.hide = function () {
-    this.selector.hide();
+    this.selector.addClass('hidden');
 };
 Component.prototype.enable = function () {
     this.selector.prop('disabled', false);

@@ -8,6 +8,7 @@
     {% load staticfiles %}
     <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
     <link href="{% static "cyberattackapp/css/main.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "cyberattackapp/css/components/component.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/components/frames/frame_root.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/components/frames/frame_map_container.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/components/frames/frame_attack_table_container.css" %}" rel="stylesheet" type="text/css">
@@ -19,6 +20,11 @@
     <script src="{% static "cyberattackapp/js/components/widgets/maps/map_leaflet.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/tables/table.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/tables/table_attack.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_attack_detail.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_attacker.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_target.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_timestamp.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_type.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame_map_container.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame_attack_table_container.js" %}"></script>
