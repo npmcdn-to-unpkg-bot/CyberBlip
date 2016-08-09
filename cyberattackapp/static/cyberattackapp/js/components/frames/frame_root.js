@@ -10,7 +10,7 @@ FrameRoot.prototype.init = function () {
 
     var data = {
         'timestamp': '24:00:00',
-        'organization': 'nintendo',
+        'organization': 'a really really loooooooooooooooooooooooooooooooooooooooooooong name',
         'attacker_location': 'japan',
         'ip': '192.168.56.104',
         'target_location': 'portland, ME',
