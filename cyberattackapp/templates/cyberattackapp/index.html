@@ -7,8 +7,10 @@
     <title>CyberAttack App</title>
     {% load staticfiles %}
     <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.css" />
-    <link href="{% static "cyberattackapp/css/components/frames/frame_root.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/main.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "cyberattackapp/css/components/frames/frame_root.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "cyberattackapp/css/components/frames/frame_map_container.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "cyberattackapp/css/components/frames/frame_attack_table_container.css" %}" rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
     <script src="{% static "cyberattackapp/js/components/component.js" %}"></script>
@@ -16,11 +18,15 @@
     <script src="{% static "cyberattackapp/js/components/widgets/maps/map.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/maps/map_leaflet.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/widgets/tables/table.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/widgets/tables/table_attack.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/frames/frame_map_container.js" %}"></script>
+    <script src="{% static "cyberattackapp/js/components/frames/frame_attack_table_container.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame_root.js" %}"></script>
     <script src="{% static "cyberattackapp/js/main.js" %}"></script>
 </head>
 <body>
-    <div id="map"></div>
+    {% include "cyberattackapp/frames/frame_map_container.html" %}
+    {% include "cyberattackapp/frames/frame_attack_table_container.html" %}
 </body>
 </html>
