@@ -13,12 +13,10 @@ FrameRoot.prototype.init = function () {
         'organization': 'a really really loooooooooooooooooooooooooooooooooooooooooooong name',
         'attacker_location': 'japan',
         'ip': '192.168.56.104',
-        'target_location': 'portland, ME',
+        'target_location': '45.952129, -68.749712',
         'service': 'SSH',
         'port': '42'
     };
-    for (var i = 0; i < 30; i++){
-        data['port'] = String(i);
-        this.components['frame_attack_table_container'].handle('add_attack_row', data);
-    }
+    this.components['frame_attack_table_container'].handle('add_attack_row', data);
+    this.components['frame_map_container'].handle('attack', {'latitude': 45.952129, 'longitude': -68.749712, 'info': data})
 };

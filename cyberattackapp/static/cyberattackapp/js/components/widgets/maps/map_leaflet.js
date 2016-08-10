@@ -49,7 +49,22 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info) {
 
         }, 50);
     });
-    var infowindow = L.popup().setContent("<p>" + String(info) + "</p>");
+    var description = [];
+    for (var field in info) {
+        if (info.hasOwnProperty(field)) {
+            var field_value = String(info[field]);
+            if (field_value.length > 0) {
+                var s = String.format("<tr><td><em>{0}</em></td><td>{1}</td></tr>", String(field), String(field_value));
+                description.push(s);
+            }
+        }
+    }
+    description = description.join("");
+    description = '<table style="text-align:left;width:100%;">' + description + '</table>';
+    var infowindow = L.popup({
+            minHeight: 500,
+            minWidth: 500
+    }).setContent(description);
     blip.bindPopup(infowindow);
     blip.addTo(this.map);
     return blip
