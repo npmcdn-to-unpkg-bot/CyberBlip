@@ -20,29 +20,22 @@ MapLeaflet.prototype.init = function () {
     });
     this.map.addLayer(myTileLayer);
 };
-MapLeaflet.prototype.add_blip = function (lat, lon, type) {
-    var blip_class = 'attacker-blip';
-    if (type === 'target') {
-        blip_class = 'target-blip';
-    }
+MapLeaflet.prototype.add_blip = function (lat, lon) {
     var icon_id = this.next_blip_id;
     this.next_blip_id++;
     var icon = L.divIcon({
         iconSize: [0, 0],
-        iconAnchor: [10, 10],
-        popupAnchor: [10, 0],
+        iconAnchor: [0, 0],
+        popupAnchor: [0, 0],
         shadowSize: [0, 0],
-        className: String.format('blip {0} uniquename{1}', blip_class, String(icon_id))
+        className: String.format('blip uniquename{0}',  String(icon_id))
     });
 
     //marker latlng
     var ll = L.latLng(lat, lon);
 
     // create marker
-    var marker = L.marker(ll, {
-        icon: icon,
-        title: 'look at me!'
-    });
+    var marker = L.marker(ll, {icon: icon});
     marker.on('add', function(){
         var selector = String.format('.uniquename{0}', String(icon_id));
         var myIcon = document.querySelector(selector);
@@ -52,7 +45,17 @@ MapLeaflet.prototype.add_blip = function (lat, lon, type) {
             myIcon.style.marginLeft = '-50px';
             myIcon.style.marginTop = '-50px';
             myIcon.style.opacity = '0';
-        }, 1);
+
+        }, 50);
     });
     marker.addTo(this.map);
+};
+MapLeaflet.prototype.add_pulsing_blip = function(lat, lon){
+    for (var i = 0; i < 10; i++){
+        (function (instance) {
+            setTimeout(function () {
+                instance.add_blip(lat, lon);
+            }, i * 50);
+        })(this);
+    }
 };
