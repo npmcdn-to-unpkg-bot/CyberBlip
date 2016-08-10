@@ -13,6 +13,7 @@ MapLeaflet.prototype.init = function () {
     var myLatLng = L.latLng(this.center_lat, this.center_lon);
     var myTileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
         "access_token=" + configs['ACCESS_TOKEN']);
+
     this.map = L.map(this.selector[0],
     {
         zoom: this.center_zoom,
@@ -35,8 +36,11 @@ MapLeaflet.prototype.add_blip = function (lat, lon) {
     var ll = L.latLng(lat, lon);
 
     // create marker
-    var marker = L.marker(ll, {icon: icon});
-    marker.on('add', function(){
+    var blip = L.marker(ll, {icon: icon});
+    blip.on('click', function () {
+        alert('clicked');
+    });
+    blip.on('add', function(){
         var selector = String.format('.uniquename{0}', String(icon_id));
         var myIcon = document.querySelector(selector);
         setTimeout(function(){
@@ -48,14 +52,24 @@ MapLeaflet.prototype.add_blip = function (lat, lon) {
 
         }, 50);
     });
-    marker.addTo(this.map);
+    blip.addTo(this.map);
+    return blip
+};
+MapLeaflet.prototype.remove_blip = function (blip) {
+    this.map.removeLayer(blip);
 };
 MapLeaflet.prototype.add_pulsing_blip = function(lat, lon){
-    for (var i = 0; i < 10; i++){
+    for (var j = 0; j < 50; j++){
         (function (instance) {
             setTimeout(function () {
-                instance.add_blip(lat, lon);
-            }, i * 50);
+                var blip = instance.add_blip(lat, lon);
+                setTimeout(function(){
+                    instance.remove_blip(blip);
+                }, j * 50);
+            }, j * 300);
         })(this);
     }
+};
+MapLeaflet.prototype.add_line_animation = function (start_lat, start_lon, end_lat, end_lon) {
+
 };
