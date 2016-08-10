@@ -75,6 +75,3 @@ MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info){
         }, 16500);
     })(this);
 };
-MapLeaflet.prototype.add_line_animation = function (start_lat, start_lon, end_lat, end_lon) {
-
-};
