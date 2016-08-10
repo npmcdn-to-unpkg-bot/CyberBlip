@@ -21,7 +21,7 @@ MapLeaflet.prototype.init = function () {
     });
     this.map.addLayer(myTileLayer);
 };
-MapLeaflet.prototype.add_blip = function (lat, lon) {
+MapLeaflet.prototype.add_blip = function (lat, lon, info) {
     var icon_id = this.next_blip_id;
     this.next_blip_id++;
     var icon = L.divIcon({
@@ -37,9 +37,6 @@ MapLeaflet.prototype.add_blip = function (lat, lon) {
 
     // create marker
     var blip = L.marker(ll, {icon: icon});
-    blip.on('click', function () {
-        alert('clicked');
-    });
     blip.on('add', function(){
         var selector = String.format('.uniquename{0}', String(icon_id));
         var myIcon = document.querySelector(selector);
@@ -52,23 +49,31 @@ MapLeaflet.prototype.add_blip = function (lat, lon) {
 
         }, 50);
     });
+    var infowindow = L.popup().setContent("<p>" + String(info) + "</p>");
+    blip.bindPopup(infowindow);
     blip.addTo(this.map);
     return blip
 };
 MapLeaflet.prototype.remove_blip = function (blip) {
     this.map.removeLayer(blip);
 };
-MapLeaflet.prototype.add_pulsing_blip = function(lat, lon){
+MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info){
+    var blips = [];
     for (var j = 0; j < 50; j++){
         (function (instance) {
             setTimeout(function () {
-                var blip = instance.add_blip(lat, lon);
-                setTimeout(function(){
-                    instance.remove_blip(blip);
-                }, j * 50);
+                var blip = instance.add_blip(lat, lon, info);
+                blips.push(blip);
             }, j * 300);
         })(this);
     }
+    (function (instance) {
+        setTimeout(function () {
+           for (var i = 0; i < blips.length; i++){
+               instance.remove_blip(blips[i]);
+           }
+        }, 16500);
+    })(this);
 };
 MapLeaflet.prototype.add_line_animation = function (start_lat, start_lon, end_lat, end_lon) {
 
