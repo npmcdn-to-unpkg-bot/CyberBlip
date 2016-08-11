@@ -3,7 +3,16 @@ $(document).ready(function () {
         window.configs = JSON.parse(data);
     }).done(
         function () {
-            new FrameRoot($("body")).init();
+            var root_frame = new FrameRoot($("body"));
+            root_frame.init();
+            $.get('', function (data) {
+                var attacks = JSON.parse(data);
+                for (var i = 0; i < attacks.length; i++){
+                    var attack = attacks[i];
+                    var timestamp = attack['timestamp'];
+                    root_frame.handle('attack', attack);
+                }
+            });
         }
     );
 });

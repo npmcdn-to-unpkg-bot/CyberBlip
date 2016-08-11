@@ -31,7 +31,7 @@ FrameAttackTableContainer.prototype.remove_table_row = function (index) {
 };
 FrameAttackTableContainer.prototype.add_table_row = function (data) {
     this.components['table_timestamp'].add_body_row([data['timestamp']]);
-    this.components['table_attacker'].add_body_row([data['organization'], data['attacker_location'], data['ip']]);
-    this.components['table_target'].add_body_row([data['target_location']]);
+    this.components['table_attacker'].add_body_row([data['organization'], String(data['attacker_latitude']) + ', ' + String(data['attacker_longitude']), data['attacker_ip']]);
+    this.components['table_target'].add_body_row([String(data['target_latitude']) + ', ' + String(data['target_longitude'])]);
     this.components['table_type'].add_body_row([data['service'], data['port']]);
 };
