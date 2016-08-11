@@ -11,6 +11,12 @@ FrameRoot.prototype.init = function () {
 FrameRoot.prototype.handle = function (event, data) {
     if (event === 'attack') {
         this.components['frame_attack_table_container'].handle('add_attack_row', data);
-        this.components['frame_map_container'].handle('attack', {'latitude': data['attacker_latitude'], 'longitude': data['attacker_longitude'], 'info': data})
+        this.components['frame_map_container'].handle('attack',
+            {
+                'attacker_latitude': data['attacker_latitude'],
+                'attacker_longitude': data['attacker_longitude'],
+                'target_latitude': data['target_latitude'],
+                'target_longitude': data['target_longitude'],
+                'info': data})
     }
 };

@@ -9,6 +9,7 @@ FrameMapContainer.prototype.init = function () {
 };
 FrameMapContainer.prototype.handle = function (event, data) {
     if (event === 'attack') {
-        this.components['map'].add_pulsing_blip(data['latitude'], data['longitude'], data['info']);
+        this.components['map'].add_pulsing_blip(data['attacker_latitude'], data['attacker_longitude'], data['info']);
+        this.components['map'].add_pulsing_blip(data['target_latitude'], data['target_longitude'], data['info'], 'target');
     }
 };

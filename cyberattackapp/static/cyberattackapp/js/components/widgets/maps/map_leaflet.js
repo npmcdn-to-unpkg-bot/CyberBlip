@@ -21,15 +21,19 @@ MapLeaflet.prototype.init = function () {
     });
     this.map.addLayer(myTileLayer);
 };
-MapLeaflet.prototype.add_blip = function (lat, lon, info) {
+MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     var icon_id = this.next_blip_id;
     this.next_blip_id++;
+    var class_type = 'attacker_blip';
+    if (type === 'target'){
+        class_type = 'target_blip';
+    }
     var icon = L.divIcon({
         iconSize: [0, 0],
         iconAnchor: [0, 0],
         popupAnchor: [0, 0],
         shadowSize: [0, 0],
-        className: String.format('blip uniquename{0}',  String(icon_id))
+        className: String.format('blip {0} uniquename{1}', class_type, String(icon_id))
     });
 
     //marker latlng
@@ -72,12 +76,12 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info) {
 MapLeaflet.prototype.remove_blip = function (blip) {
     this.map.removeLayer(blip);
 };
-MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info){
+MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type){
     var blips = [];
     for (var j = 0; j < 50; j++){
         (function (instance) {
             setTimeout(function () {
-                var blip = instance.add_blip(lat, lon, info);
+                var blip = instance.add_blip(lat, lon, info, type);
                 blips.push(blip);
             }, j * 300);
         })(this);
