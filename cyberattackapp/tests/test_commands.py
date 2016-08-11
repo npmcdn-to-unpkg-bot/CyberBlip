@@ -16,6 +16,9 @@ class GetAttackCommandTestCase(TestCase):
         """
         Testing method for the temporary execute method.
         """
+        keys = sorted(['timestamp', 'attacker_latitude', 'attacker_longitude', 'target_latitude', 'target_longitude',
+                       'attacker_ip', 'service', 'port'])
+
         recent_attacks = self.get_attacks_command.execute()
         for attack in recent_attacks:
-            print(attack)
+            self.assertListEqual(keys, sorted(list(attack.keys())))
