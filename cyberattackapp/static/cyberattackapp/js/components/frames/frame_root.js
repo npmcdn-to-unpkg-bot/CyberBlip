@@ -17,6 +17,9 @@ FrameRoot.prototype.init = function () {
         'service': 'SSH',
         'port': '42'
     };
-    this.components['frame_attack_table_container'].handle('add_attack_row', data);
+    for (var i = 0; i < 10; i++){
+        data['port'] = i;
+        this.components['frame_attack_table_container'].handle('add_attack_row', data);
+    }
     this.components['frame_map_container'].handle('attack', {'latitude': 45.952129, 'longitude': -68.749712, 'info': data})
 };
