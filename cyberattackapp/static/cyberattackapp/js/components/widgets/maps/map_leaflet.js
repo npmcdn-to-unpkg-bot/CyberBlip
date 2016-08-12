@@ -21,32 +21,42 @@ MapLeaflet.prototype.init = function () {
     });
     this.map.addLayer(myTileLayer);
 };
-MapLeaflet.prototype.add_wave = function (start_lat, start_lon, end_lat, end_lon, speed) {
-    this.next_wave_id++;
-    var icon = L.divIcon({
-        iconSize: [0, 0],
-        iconAnchor: [0, 0],
-        popupAnchor: [0, 0],
-        shadowSize: [0, 0],
-        className: 'wave'
-    });
-    var wave_marker = L.Marker.movingMarker(
-        [[start_lat, start_lon], [end_lat, end_lon]],
-        2000,
-        {
-            autostart: true,
-            icon: icon
-        }
-    );
-    (function(instance){
-        wave_marker.on('end', function () {
-            instance.remove_wave(wave_marker);
-        });
-    })(this);
-    wave_marker.addTo(this.map);
+MapLeaflet.prototype.remove_layer = function(layer) {
+    this.map.removeLayer(layer);
 };
-MapLeaflet.prototype.remove_wave = function(wave) {
-    this.map.removeLayer(wave);
+MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
+    this.add_pulsing_blip(attacker_lat, attacker_lon, info, 'attack', 300, 5000);
+    this.add_pulsing_blip(target_lat, target_lon, info, 'target', 300, 5000);
+    this.add_streaming_bits(attacker_lat, attacker_lon, target_lat, target_lon, 150, 5000);
+};
+MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_speed, time){
+    var blips = [];
+    var stream_bit_count = time/pulse_speed;
+    for (var i = 0; i < stream_bit_count; i++) {
+        (function (instance) {
+            setTimeout(function () {
+                var blip = instance.add_blip(lat, lon, info, type);
+                blips.push(blip);
+            }, i * pulse_speed);
+        })(this);
+    }
+    (function (instance) {
+        setTimeout(function () {
+           for (var i = 0; i < blips.length; i++){
+               instance.remove_layer(blips[i]);
+           }
+        }, time * 2);
+    })(this);
+};
+MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_lat, end_lon, stream_speed, time) {
+    var stream_bit_count = time/stream_speed;
+    for (var i = 0; i < stream_bit_count; i++) {
+        (function (instance) {
+            setTimeout(function(){
+                instance.add_stream_bit(start_lat, start_lon, end_lat, end_lon);
+            }, i * stream_speed);
+        })(this);
+    }
 };
 MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     var icon_id = this.next_blip_id;
@@ -99,38 +109,26 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     blip.addTo(this.map);
     return blip
 };
-MapLeaflet.prototype.remove_blip = function (blip) {
-    this.map.removeLayer(blip);
-};
-MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type){
-    var blips = [];
-    for (var j = 0; j < 50; j++){
-        (function (instance) {
-            setTimeout(function () {
-                var blip = instance.add_blip(lat, lon, info, type);
-                blips.push(blip);
-            }, j * 300);
-        })(this);
-    }
-    (function (instance) {
-        setTimeout(function () {
-           for (var i = 0; i < blips.length; i++){
-               instance.remove_blip(blips[i]);
-           }
-        }, 16500);
+MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
+    var stream_bit_icon = L.divIcon({
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+        popupAnchor: [0, 0],
+        shadowSize: [0, 0],
+        className: 'stream_bit'
+    });
+    var stream_bit_marker = L.Marker.movingMarker(
+        [[start_lat, start_lon], [end_lat, end_lon]],
+        2000,
+        {
+            autostart: true,
+            icon: stream_bit_icon
+        }
+    );
+    (function(instance){
+        stream_bit_marker.on('end', function () {
+            instance.remove_layer(stream_bit_marker);
+        });
     })(this);
-};
-MapLeaflet.prototype.add_streaming_wave = function (start_lat, start_lon, end_lat, end_lon) {
-    for (var i = 0; i < 100; i++){
-        (function (instance) {
-            setTimeout(function(){
-                instance.add_wave(start_lat, start_lon, end_lat, end_lon);
-            }, i * 150);
-        })(this);
-    }
-};
-MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
-    this.add_streaming_wave(attacker_lat, attacker_lon, target_lat, target_lon);
-    this.add_pulsing_blip(attacker_lat, attacker_lon, info, 'attack');
-    this.add_pulsing_blip(target_lat, target_lon, info, 'target');
+    stream_bit_marker.addTo(this.map);
 };

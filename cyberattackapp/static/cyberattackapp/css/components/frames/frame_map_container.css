@@ -25,7 +25,7 @@
     border: 2px solid lightskyblue;
     box-shadow: 0 0 4px cadetblue;
 }
-.wave {
+.stream_bit {
     border: 2px solid white; /* the 'strokes' of the arc */
     border-radius: 50%; /* for making the elements 'round' */
     border-top-color: transparent; /* hiding the top border */
