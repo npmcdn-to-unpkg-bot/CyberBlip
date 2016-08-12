@@ -5,6 +5,7 @@ function MapLeaflet(selector, center_lat, center_lon, center_zoom){
     this.center_lon = center_lon;
     this.center_zoom = center_zoom;
     this.next_blip_id = 0;
+    this.next_wave_id = 0;
 }
 MapLeaflet.prototype = Object.create(Map.prototype);
 MapLeaflet.prototype.__super__map__leaflet__ = Map;
@@ -20,6 +21,30 @@ MapLeaflet.prototype.init = function () {
         center: myLatLng
     });
     this.map.addLayer(myTileLayer);
+};
+MapLeaflet.prototype.add_wave = function (start_lat, start_lon, end_lat, end_lon) {
+    var icon_id = this.next_wave_id;
+    this.next_wave_id++;
+    var icon = L.divIcon({
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+        popupAnchor: [0, 0],
+        shadowSize: [0, 0],
+        className: String.format('wave uniquename{1}', String(icon_id))
+    });
+    var wave_marker = L.Marker.movingMarker(
+        [[start_lat, start_lon], [end_lat, end_lon]],
+        2000,
+        {
+            autostart: true,
+            loop: true
+        }
+    );
+    wave_marker.addTo(this.map);
+    return wave_marker;
+};
+MapLeaflet.prototype.remove_wave = function(wave) {
+    this.map.removeLayer(wave);
 };
 MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     var icon_id = this.next_blip_id;
@@ -50,7 +75,6 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
             myIcon.style.marginLeft = '-50px';
             myIcon.style.marginTop = '-50px';
             myIcon.style.opacity = '0';
-
         }, 50);
     });
     var description = [];
@@ -76,7 +100,7 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
 MapLeaflet.prototype.remove_blip = function (blip) {
     this.map.removeLayer(blip);
 };
-MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type){
+MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, callback){
     var blips = [];
     for (var j = 0; j < 50; j++){
         (function (instance) {
@@ -91,6 +115,18 @@ MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type){
            for (var i = 0; i < blips.length; i++){
                instance.remove_blip(blips[i]);
            }
+           callback();
         }, 16500);
     })(this);
+};
+MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
+    var wave = this.add_wave(attacker_lat, attacker_lon, target_lat, target_lon);
+    (function(instance){
+        instance.add_pulsing_blip(attacker_lat, attacker_lon, info, 'attack', function () {
+            instance.remove_wave(wave);
+        });
+    })(this);
+    this.add_pulsing_blip(target_lat, target_lon, info, 'target', function () {
+        /* do nothing */
+    });
 };
