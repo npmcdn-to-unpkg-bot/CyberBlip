@@ -1,57 +1,44 @@
 <div id="frame_attack_table_container">
     <table id="table_attack">
-        <thead class="basetableheader">
-            <th>Attacks</th>
-        </thead>
         <tbody>
             <tr>
-                <td>
-                    <table id="table_attack_detail">
+                <td  style="width: 14%">
+                    <table id="table_timestamp" class="other">
+                        <caption class="subtableheader">Timestamp</caption>
                         <thead class="subtableheader">
-                            <th>Timestamp</th>
-                            <th>Attacker</th>
-                            <th>Target</th>
-                            <th>Type</th>
+                            <th>hh:mm:ss</th>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <table id="table_timestamp">
-                                        <thead class="subtableheader">
-                                            <th>hh:mm:ss</th>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table id="table_attacker">
-                                        <thead class="subtableheader">
-                                            <th>Organization</th>
-                                            <th>Location</th>
-                                            <th>IP</th>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table id="table_target">
-                                        <thead class="subtableheader">
-                                            <th>Location</th>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </td>
-                                <td>
-                                    <table id="table_type">
-                                        <thead class="subtableheader">
-                                            <th>Service</th>
-                                            <th>Port</th>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
+                    </table>
+                </td>
+                <td  style="width: 43%">
+                    <table id="table_attacker" class="attacker">
+                        <caption>Attacker</caption>
+                        <thead class="subtableheader">
+                            <th>Organization</th>
+                            <th>Location</th>
+                            <th>IP</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </td>
+                <td  style="width: 14%">
+                    <table id="table_target" class="target">
+                        <caption class="subtableheader">Target</caption>
+                        <thead class="subtableheader">
+                            <th>Location</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </td>
+                <td  style="width: 28%;">
+                    <table id="table_type" class="other">
+                        <caption class="subtableheader">Type</caption>
+                        <thead class="subtableheader">
+                            <th>Service</th>
+                            <th>Port</th>
+                        </thead>
+                        <tbody></tbody>
                     </table>
                 </td>
             </tr>
