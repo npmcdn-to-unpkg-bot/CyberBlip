@@ -1,5 +1,6 @@
 function Map(selector) {
     Component.call(this, selector);
+    this.map = null;
 }
 Map.prototype = Object.create(Component.prototype);
 Map.prototype.disable = function () {
@@ -7,6 +8,11 @@ Map.prototype.disable = function () {
 };
 Map.prototype.enable = function () {
     /* do nothing */
+};
+Map.prototype.remove_layer = function(layer) {
+    if(this.map){
+        this.map.removeLayer(layer);
+    }
 };
 Map.prototype.get_angle = function (lat1, lon1, lat2, lon2) {
 

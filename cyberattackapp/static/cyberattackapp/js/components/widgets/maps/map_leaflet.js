@@ -1,6 +1,5 @@
 function MapLeaflet(selector, center_lat, center_lon, center_zoom){
     Map.call(this, selector);
-    this.map = null;
     this.center_lat = center_lat;
     this.center_lon = center_lon;
     this.center_zoom = center_zoom;
@@ -21,9 +20,6 @@ MapLeaflet.prototype.init = function () {
         center: myLatLng
     });
     this.map.addLayer(myTileLayer);
-};
-MapLeaflet.prototype.remove_layer = function(layer) {
-    this.map.removeLayer(layer);
 };
 MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
     this.add_pulsing_blip(attacker_lat, attacker_lon, info, 'attack', 300, 5000);
@@ -111,7 +107,6 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     return blip
 };
 MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
-    var angle = this.get_angle(start_lat, start_lon, end_lat, end_lon);
     var bit_id = this.next_stream_bit_id++;
     this.next_stream_bit_id++;
     var stream_bit_icon = L.divIcon({
