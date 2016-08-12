@@ -8,18 +8,18 @@ Map.prototype.disable = function () {
 Map.prototype.enable = function () {
     /* do nothing */
 };
-Map.prototype.set_boundaries = function (south_west_lat, south_west_lon, north_east_lat, north_east_lon) {
-    /* do nothing */
-};
-Map.prototype.remove_marker = function (marker) {
-    /* do nothing */
-};
-Map.prototype.add_marker = function (latitude, longitude, info, icon) {
-    /* do nothing */
-};
-Map.prototype.draw_circle = function (center_x, center_y, radius) {
-    /* do nothing */
-};
-Map.prototype.clear_circles = function () {
-    /* do nothing */
+Map.prototype.get_angle = function (lat1, lon1, lat2, lon2) {
+
+    var dLon = (lon2 - lon1);
+
+    var y = Math.sin(dLon) * Math.cos(lat2);
+    var x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+
+    var brng = Math.atan2(y, x);
+
+    brng = Math.degrees(brng);
+    brng = (brng + 360) % 360;
+    brng = 360 - brng;
+
+    return brng;
 };

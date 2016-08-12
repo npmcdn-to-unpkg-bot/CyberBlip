@@ -9,3 +9,7 @@ if (!String.format) {
         });
     };
 }
+// Converts from radians to degrees.
+Math.degrees = function(radians) {
+  return radians * 180 / Math.PI;
+};

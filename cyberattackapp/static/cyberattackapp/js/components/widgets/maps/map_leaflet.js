@@ -5,6 +5,7 @@ function MapLeaflet(selector, center_lat, center_lon, center_zoom){
     this.center_lon = center_lon;
     this.center_zoom = center_zoom;
     this.next_blip_id = 0;
+    this.next_stream_bit_id = 0;
 }
 MapLeaflet.prototype = Object.create(Map.prototype);
 MapLeaflet.prototype.__super__map__leaflet__ = Map;
@@ -70,7 +71,7 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
         iconAnchor: [0, 0],
         popupAnchor: [0, 0],
         shadowSize: [0, 0],
-        className: String.format('blip {0} uniquename{1}', class_type, String(icon_id))
+        className: String.format('blip {0} blipid{1}', class_type, String(icon_id))
     });
 
     //marker latlng
@@ -79,7 +80,7 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     // create marker
     var blip = L.marker(ll, {icon: icon});
     blip.on('add', function(){
-        var selector = String.format('.uniquename{0}', String(icon_id));
+        var selector = String.format('.blipid{0}', String(icon_id));
         var myIcon = document.querySelector(selector);
         setTimeout(function(){
             myIcon.style.width = '100px';
@@ -110,12 +111,15 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     return blip
 };
 MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
+    var angle = this.get_angle(start_lat, start_lon, end_lat, end_lon);
+    var bit_id = this.next_stream_bit_id++;
+    this.next_stream_bit_id++;
     var stream_bit_icon = L.divIcon({
         iconSize: [0, 0],
         iconAnchor: [0, 0],
         popupAnchor: [0, 0],
         shadowSize: [0, 0],
-        className: 'stream_bit'
+        className: String.format('stream_bit bitid{0}', String(bit_id))
     });
     var stream_bit_marker = L.Marker.movingMarker(
         [[start_lat, start_lon], [end_lat, end_lon]],
@@ -131,4 +135,14 @@ MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, e
         });
     })(this);
     stream_bit_marker.addTo(this.map);
+    var selector = String.format('.bitid{0}', String(bit_id));
+    var myIcon = $(selector);
+    myIcon.animate({
+        'opacity': .10,
+        'width': '100px',
+        'margin-left': '-50px',
+        'margin-right': '-50px',
+        'borderColor': '#87cefa'
+    }, 2000);
+
 };
