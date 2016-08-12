@@ -29,6 +29,7 @@ Table.prototype.add_body_row = function (data, args) {
     }
     row = row + '</tr>';
     this.body.append(row);
+    return this.body.find('tr:last');
 };
 Table.prototype.remove_body_row = function (index) {
     this.body.find("tr:eq(" + index + ")").remove();
