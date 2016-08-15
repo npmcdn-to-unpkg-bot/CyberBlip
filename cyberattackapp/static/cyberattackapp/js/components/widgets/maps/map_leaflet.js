@@ -1,10 +1,11 @@
-function MapLeaflet(selector, center_lat, center_lon, center_zoom){
+function MapLeaflet(selector, center_lat, center_lon, zoom, fixed){
     Map.call(this, selector);
     this.center_lat = center_lat;
     this.center_lon = center_lon;
-    this.center_zoom = center_zoom;
+    this.zoom = zoom;
     this.next_blip_id = 0;
     this.next_stream_bit_id = 0;
+    this.locked = fixed
 }
 MapLeaflet.prototype = Object.create(Map.prototype);
 MapLeaflet.prototype.__super__map__leaflet__ = Map;
@@ -14,11 +15,30 @@ MapLeaflet.prototype.init = function () {
     var myTileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
         "access_token=" + configs['ACCESS_TOKEN']);
 
-    this.map = L.map(this.selector[0],
-    {
-        zoom: this.center_zoom,
-        center: myLatLng
-    });
+    var options;
+    if (this.locked) {
+        options = {
+            zoom: this.zoom,
+            minZoom: this.zoom,
+            maxZoom: this.zoom,
+            center: myLatLng,
+            dragging: false,
+            touchZoom: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            boxZoom: false,
+            bounceAtZoomLimits: false,
+            zoomControl: false,
+            attributionControl: false
+        }
+    }
+    else {
+        options = {
+            zoom: this.zoom,
+            center: myLatLng
+        }
+    }
+    this.map = L.map(this.selector[0], options);
     this.map.addLayer(myTileLayer);
 };
 MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
