@@ -48,32 +48,30 @@ MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_l
 };
 MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_speed, time){
     var blips = [];
-    var stream_bit_count = time/pulse_speed;
-    for (var i = 0; i < stream_bit_count; i++) {
-        (function (instance) {
-            setTimeout(function () {
-                var blip = instance.add_blip(lat, lon, info, type);
-                blips.push(blip);
-            }, i * pulse_speed);
-        })(this);
-    }
-    (function (instance) {
-        setTimeout(function () {
-           for (var i = 0; i < blips.length; i++){
-               instance.remove_layer(blips[i]);
-           }
-        }, time * 2);
+    (function (instance){
+        var pulse_interval = setInterval(function(){
+            var blip = instance.add_blip(lat, lon, info, type);
+            blips.push(blip)
+        }, pulse_speed);
+        setTimeout(function(){
+            clearInterval(pulse_interval);
+            setTimeout(function(){
+                for (var i = 0; i < blips.length; i++){
+                    instance.remove_layer(blips[i]);
+                }
+            }, time);
+        }, time);
     })(this);
 };
 MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_lat, end_lon, stream_speed, time) {
-    var stream_bit_count = time/stream_speed;
-    for (var i = 0; i < stream_bit_count; i++) {
-        (function (instance) {
-            setTimeout(function(){
-                instance.add_stream_bit(start_lat, start_lon, end_lat, end_lon);
-            }, i * stream_speed);
-        })(this);
-    }
+    (function (instance){
+        var stream_interval = setInterval(function(){
+            instance.add_stream_bit(start_lat, start_lon, end_lat, end_lon);
+        }, stream_speed);
+        setTimeout(function(){
+            clearInterval(stream_interval);
+        }, time)
+    })(this);
 };
 MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     var icon_id = this.next_blip_id;
