@@ -99,10 +99,10 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
         var selector = String.format('.blipid{0}', String(icon_id));
         var myIcon = document.querySelector(selector);
         setTimeout(function(){
-            myIcon.style.width = '100px';
-            myIcon.style.height = '100px';
-            myIcon.style.marginLeft = '-50px';
-            myIcon.style.marginTop = '-50px';
+            myIcon.style.width = '50px';
+            myIcon.style.height = '50px';
+            myIcon.style.marginLeft = '-25px';
+            myIcon.style.marginTop = '-25px';
             myIcon.style.opacity = '0';
         }, 50);
     });
@@ -154,9 +154,9 @@ MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, e
     var myIcon = $(selector);
     myIcon.animate({
         'opacity': .10,
-        'width': '100px',
-        'margin-left': '-50px',
-        'margin-right': '-50px',
+        'width': '50px',
+        'margin-left': '-25px',
+        'margin-right': '-25px',
         'borderColor': '#87cefa'
     }, 2000);
 
