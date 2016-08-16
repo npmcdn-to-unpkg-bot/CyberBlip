@@ -20,7 +20,7 @@ TableAttack.prototype.init = function () {
     this.__super__table__attack__.prototype.init.call(this);
 };
 TableAttack.prototype.grow = function () {
-    this.resize(null, '300px', 500);
+    this.resize(null, '255px', 500);
     this.handle('grow', null);
 };
 TableAttack.prototype.shrink = function () {
