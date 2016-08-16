@@ -102,6 +102,14 @@ class Service(object):
         except ObjectDoesNotExist:
             pass
 
+    def remove_models(self, **kwargs):
+        """
+        Remove a queryset of models from the database.
+
+        :param kwargs: Arguments used for filtering the queryset.
+        """
+        self.model.objects.filter(**kwargs).delete()
+
 
 class CyberAttackService(Service):
     """

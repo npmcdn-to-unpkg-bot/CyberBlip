@@ -29,6 +29,8 @@ class GenerateAttacksCommand(object):
         self.cyber_attack_service = CyberAttackService()
 
     def execute(self):
+        self.cyber_attack_service.remove_models()
+        
         attacker_lat_lngs = [(44.389661, -70.471819), (45.246879, -70.164202), (44.812069, -68.939226),
                     (44.913302, -67.950457), (46.262518, -68.763445)]
         target_lat_lngs = [(43.643058, -70.257585), (43.643058, -70.257585), (43.643058, -70.257585),
