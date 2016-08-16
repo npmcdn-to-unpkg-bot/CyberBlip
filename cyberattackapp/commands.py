@@ -1,10 +1,32 @@
 from datetime import datetime, timedelta
+from .services import CyberAttackService
 
 
 class GetAttacksCommand(object):
-
+    """
+    Command class for retrieving cyber attacks from the database.
+    """
     def __init__(self):
-        pass
+        """
+        Initialize a new GetAttacksCommand instance.
+        """
+        self.cyber_attack_service = CyberAttackService()
+
+    def execute(self):
+        """
+        Execute the command.
+
+        :return: All the CyberAttacks in the database.
+        """
+        return self.cyber_attack_service.list_models()
+
+
+class GenerateAttacksCommand(object):
+    """
+    Temporary class for generating cyber attacks to populate the database.
+    """
+    def __init__(self):
+        self.cyber_attack_service = CyberAttackService()
 
     def execute(self):
         attacker_lat_lngs = [(44.389661, -70.471819), (45.246879, -70.164202), (44.812069, -68.939226),
@@ -14,19 +36,21 @@ class GetAttacksCommand(object):
 
         timestamp_generator = self._generate_timestamps()
         attacks_list = list()
-        count = 0
-        for i in range(3):
-            for j in range(5):
-                timestamp = next(timestamp_generator)
-                attacker_lat_lng = attacker_lat_lngs[j]
-                target_lat_lng = target_lat_lngs[j]
+        for j in range(5):
+            timestamp = next(timestamp_generator)
+            attacker_lat_lng = attacker_lat_lngs[j]
+            target_lat_lng = target_lat_lngs[j]
 
-                attacks_list.append({'timestamp': timestamp,
-                                     'attacker_latitude': attacker_lat_lng[0], 'attacker_longitude': attacker_lat_lng[1],
-                                     'target_latitude': target_lat_lng[0], 'target_longitude': target_lat_lng[1],
-                                     'attacker_ip': '127.0.0.{0}'.format(count),
-                                     'service': 'SSH', 'port': 42})
-                count += 1
+            self.cyber_attack_service.create_model(timestamp=timestamp,
+                                                   attacker_latitude=attacker_lat_lng[0],
+                                                   attacker_longitude=attacker_lat_lng[1],
+                                                   attacker_location='Burger King',
+                                                   target_latitude=target_lat_lng[0],
+                                                   target_longitude=target_lat_lng[1],
+                                                   target_location='McDonalds',
+                                                   attacker_ip='127.0.0.{0}'.format(j),
+                                                   service='SSH',
+                                                   port=42)
 
         return attacks_list
 
@@ -36,7 +60,7 @@ class GetAttacksCommand(object):
         """
         curr_time = datetime.now()
         while True:
-            yield '{:%H:%M:%S}'.format(curr_time)
+            yield '{0}-{1}-{2} {3}:{4}:{5}'.format(curr_time.year, curr_time.month, curr_time.day, curr_time.hour, curr_time.minute, curr_time.second)
             curr_time = curr_time + timedelta(seconds=10)
 
 

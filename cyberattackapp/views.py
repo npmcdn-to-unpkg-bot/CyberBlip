@@ -1,17 +1,22 @@
-import json
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.views.generic import View
-from .commands import GetAttacksCommand
+from rest_framework.viewsets import ModelViewSet
+from .commands import GetAttacksCommand, GenerateAttacksCommand
+from .serializers import CyberAttackSerializer
 
 
-class CyberAttackView(View):
+class CyberAttackView(ModelViewSet):
     """
-    A View class responsible for GET and POST requests related to Cyber Attacks.
+    A View class responsible for GET requests related to Cyber Attacks.
+    """
+    queryset = GetAttacksCommand().execute()
+    serializer_class = CyberAttackSerializer
+
+
+class CyberMapView(View):
+    """
+    A View class responsible for rendering the Cyber Attack Map.
     """
     def get(self, request):
-        if request.is_ajax():
-            recent_attacks = GetAttacksCommand().execute()
-            return HttpResponse(json.dumps(recent_attacks), status=200)
-        else:
-            return render(request, "cyberattackapp/index.html")
+        GenerateAttacksCommand().execute()
+        return render(request, "cyberattackapp/index.html")

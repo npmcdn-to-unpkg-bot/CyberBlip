@@ -1,7 +1,12 @@
 from django.conf.urls import url
-from .views import CyberAttackView
+from rest_framework.routers import DefaultRouter
+from .views import CyberMapView, CyberAttackView
 
+router = DefaultRouter()
+router.register(r'cyberattacks', CyberAttackView)
 
 urlpatterns = [
-    url(r'^$', CyberAttackView.as_view(), name='cyber_attack_view')
+    url(r'^$', CyberMapView.as_view(), name='cyber_map_view')
 ]
+
+urlpatterns += router.urls

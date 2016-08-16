@@ -18,11 +18,14 @@ FrameRoot.prototype.handle = function (event, data) {
     if (event === 'update_attacks') {
         var start_time = null;
         (function(instance){
-            $.get('', function (data) {
-                var attacks = JSON.parse(data);
-                for (var i = 0; i < attacks.length; i++){
-                    var attack = attacks[i];
+            $.get('cyberattacks', function (data) {
+                for (var i = 0; i < data.length; i++){
+                    var attack = data[i];
                     var timestamp = String(attack['timestamp']).split(':');
+                    timestamp.splice(0, 1, timestamp[0].split('T'));
+                    timestamp.splice(-1, 1, timestamp[timestamp.length - 1].split('Z'));
+                    timestamp[0] = timestamp[0][1];
+                    timestamp[2] = timestamp[2][0];
                     var this_time = new Date();
                     this_time.setHours(timestamp[0]);
                     this_time.setMinutes(timestamp[1]);

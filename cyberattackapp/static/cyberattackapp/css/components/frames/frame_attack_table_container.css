@@ -26,6 +26,7 @@ table {
 }
 table th, table td {
     white-space: nowrap;
+    overflow: hidden;
 }
 caption, .basetableheader {
     font-size: 17px;
