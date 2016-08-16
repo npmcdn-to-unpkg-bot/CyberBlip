@@ -34,6 +34,14 @@ Table.prototype.add_body_row = function (data, args) {
 Table.prototype.remove_body_row = function (index) {
     this.body.find("tr:eq(" + index + ")").remove();
 };
+Table.prototype.hide_body_row = function(index) {
+    var row = this.body.find("tr:eq(" + index + ")");
+    row.addClass("hidden");
+    return row
+};
+Table.prototype.show_body_row = function (index) {
+    this.body.find("tr:eq(" + index + ")").removeClass("hidden");
+};
 Table.prototype.format_args = function (args, arg_strings) {
     var formatted_args = arg_strings;
     if(args) {

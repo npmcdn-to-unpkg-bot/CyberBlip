@@ -14,6 +14,7 @@ class GetAttacksCommand(object):
 
         timestamp_generator = self._generate_timestamps()
         attacks_list = list()
+        count = 0
         for i in range(3):
             for j in range(5):
                 timestamp = next(timestamp_generator)
@@ -23,8 +24,9 @@ class GetAttacksCommand(object):
                 attacks_list.append({'timestamp': timestamp,
                                      'attacker_latitude': attacker_lat_lng[0], 'attacker_longitude': attacker_lat_lng[1],
                                      'target_latitude': target_lat_lng[0], 'target_longitude': target_lat_lng[1],
-                                     'attacker_ip': '127.0.0.{0}'.format(j),
+                                     'attacker_ip': '127.0.0.{0}'.format(count),
                                      'service': 'SSH', 'port': 42})
+                count += 1
 
         return attacks_list
 
