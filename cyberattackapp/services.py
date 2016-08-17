@@ -80,20 +80,18 @@ class Service(object):
         @return: The list of models matching the kwargs filter.
         @rtype: QuerySet
         """
-        filter_queries = []
+        filter_queries = Q()
         for arg_name in kwargs:
             if type(kwargs[arg_name]) is list:
+                or_query = Q()
                 for arg in kwargs[arg_name]:
-                    filter_queries.append(Q(**{arg_name: arg}))
+                    or_query |= (Q(**{arg_name: arg}))
+
+                filter_queries &= or_query
             else:
-                filter_queries.append(Q(**{arg_name: kwargs[arg_name]}))
+                filter_queries &= (Q(**{arg_name: kwargs[arg_name]}))
 
-        filter_query = filter_queries.pop()
-        for item in filter_queries:
-            filter_query |= item
-
-        print(filter_query)
-        return self.model.objects.filter(filter_query)
+        return self.model.objects.filter(filter_queries)
 
     def count_models(self, **kwargs):
         """
