@@ -6,11 +6,12 @@ class GetAttacksCommand(object):
     """
     Command class for retrieving cyber attacks from the database.
     """
-    def __init__(self):
+    def __init__(self, **filter_args):
         """
         Initialize a new GetAttacksCommand instance.
         """
         self.cyber_attack_service = CyberAttackService()
+        self.filter = filter_args
 
     def execute(self):
         """
@@ -18,7 +19,7 @@ class GetAttacksCommand(object):
 
         :return: All the CyberAttacks in the database.
         """
-        return self.cyber_attack_service.list_models()
+        return self.cyber_attack_service.list_models(**self.filter)
 
 
 class GenerateAttacksCommand(object):

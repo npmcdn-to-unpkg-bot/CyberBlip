@@ -12,6 +12,11 @@ class CyberAttackView(ModelViewSet):
     queryset = GetAttacksCommand().execute()
     serializer_class = CyberAttackSerializer
 
+    def get_queryset(self):
+        print(self.request.query_params)
+        queryset = GetAttacksCommand(**self.request.query_params).execute()
+        return queryset
+
 
 class CyberMapView(View):
     """
@@ -20,3 +25,4 @@ class CyberMapView(View):
     def get(self, request):
         GenerateAttacksCommand().execute()
         return render(request, "cyberattackapp/index.html")
+

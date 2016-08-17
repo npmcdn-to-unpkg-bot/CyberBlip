@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from .models import CyberAttack
 
 
@@ -79,7 +80,20 @@ class Service(object):
         @return: The list of models matching the kwargs filter.
         @rtype: QuerySet
         """
-        return self.model.objects.filter(**kwargs)
+        filter_queries = []
+        for arg_name in kwargs:
+            if type(kwargs[arg_name]) is list:
+                for arg in kwargs[arg_name]:
+                    filter_queries.append(Q(**{arg_name: arg}))
+            else:
+                filter_queries.append(Q(**{arg_name: kwargs[arg_name]}))
+
+        filter_query = filter_queries.pop()
+        for item in filter_queries:
+            filter_query |= item
+
+        print(filter_query)
+        return self.model.objects.filter(filter_query)
 
     def count_models(self, **kwargs):
         """
@@ -109,6 +123,14 @@ class Service(object):
         :param kwargs: Arguments used for filtering the queryset.
         """
         self.model.objects.filter(**kwargs).delete()
+
+    def none(self):
+        """
+        Get an empty queryset for the model.
+
+        :return: An empty queryset for the model.
+        """
+        return self.model.objects.none()
 
 
 class CyberAttackService(Service):
