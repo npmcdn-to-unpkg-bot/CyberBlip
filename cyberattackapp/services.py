@@ -43,7 +43,7 @@ class Service(object):
         @param update_args: The object parameters to update.
         @type update_args: dict
         """
-        self.model.objects.filter(**filter_args).update(**update_args)
+        self.model.objects.filter(self._parse_query(**filter_args)).update(**update_args)
 
     def get_model(self, **kwargs):
         """
@@ -52,7 +52,7 @@ class Service(object):
         @return: The model found by the given kwargs or None if no such model was found in the database.
         """
         try:
-            model_instance = self.model.objects.get(**kwargs)
+            model_instance = self.model.objects.get(self._parse_query(**kwargs))
         except ObjectDoesNotExist:
             return None
         else:
@@ -80,18 +80,7 @@ class Service(object):
         @return: The list of models matching the kwargs filter.
         @rtype: QuerySet
         """
-        filter_queries = Q()
-        for arg_name in kwargs:
-            if type(kwargs[arg_name]) is list:
-                or_query = Q()
-                for arg in kwargs[arg_name]:
-                    or_query |= (Q(**{arg_name: arg}))
-
-                filter_queries &= or_query
-            else:
-                filter_queries &= (Q(**{arg_name: kwargs[arg_name]}))
-
-        return self.model.objects.filter(filter_queries)
+        return self.model.objects.filter(self._parse_query(**kwargs))
 
     def count_models(self, **kwargs):
         """
@@ -101,7 +90,7 @@ class Service(object):
         @return: The number of models matching the kwargs filter.
         @rtype: int
         """
-        return self.model.objects.filter(**kwargs).count()
+        return self.model.objects.filter(self._parse_query(**kwargs)).count()
 
     def remove_model(self, **kwargs):
         """
@@ -110,7 +99,7 @@ class Service(object):
         @param kwargs: Arguments used for identifying the model to remove.
         """
         try:
-            self.model.objects.get(**kwargs).delete()
+            self.model.objects.get(self._parse_query(**kwargs)).delete()
         except ObjectDoesNotExist:
             pass
 
@@ -120,7 +109,7 @@ class Service(object):
 
         :param kwargs: Arguments used for filtering the queryset.
         """
-        self.model.objects.filter(**kwargs).delete()
+        self.model.objects.filter(self._parse_query(**kwargs)).delete()
 
     def none(self):
         """
@@ -129,6 +118,28 @@ class Service(object):
         :return: An empty queryset for the model.
         """
         return self.model.objects.none()
+
+    def _parse_query(self, **query_args):
+        """
+        Parse the filter query from a dictionary of query params.
+
+        :param query_args: A dictionary of query params.
+        :type query_args: dict
+        :return: The filter query matching the query args.
+        :rtype: Q
+        """
+        filter_query = Q()
+        for arg_name in query_args:
+            if type(query_args[arg_name]) is list:
+                or_query = Q()
+                for arg in query_args[arg_name]:
+                    or_query |= (Q(**{arg_name: arg}))
+
+                filter_query &= or_query
+            else:
+                filter_query &= (Q(**{arg_name: query_args[arg_name]}))
+
+        return filter_query
 
 
 class CyberAttackService(Service):

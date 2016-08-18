@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from django.utils import timezone
 from .services import CyberAttackService
 
 
@@ -62,8 +63,9 @@ class GenerateAttacksCommand(object):
         Temporary method for testing timestamps.
         """
         curr_time = datetime.now()
+        curr_time = timezone.make_aware(curr_time, timezone.get_current_timezone())
         while True:
-            yield '{0}-{1}-{2} {3}:{4}:{5}'.format(curr_time.year, curr_time.month, curr_time.day, curr_time.hour, curr_time.minute, curr_time.second)
+            yield curr_time
             curr_time = curr_time + timedelta(seconds=10)
 
 
