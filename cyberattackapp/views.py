@@ -11,6 +11,7 @@ class CyberAttackView(ModelViewSet):
     """
     queryset = GetAttacksCommand().execute()
     serializer_class = CyberAttackSerializer
+    http_method_names = ['get']
 
     def get_queryset(self):
         queryset = GetAttacksCommand(**self.request.query_params).execute()

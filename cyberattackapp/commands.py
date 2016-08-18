@@ -12,7 +12,8 @@ class GetAttacksCommand(object):
         Initialize a new GetAttacksCommand instance.
         """
         self.cyber_attack_service = CyberAttackService()
-        self.filter = filter_args
+        self.filter = filter_args.copy()
+        self.filter.pop('format', None)
 
     def execute(self):
         """
