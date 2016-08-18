@@ -62,8 +62,7 @@ class GenerateAttacksCommand(object):
         """
         Temporary method for testing timestamps.
         """
-        curr_time = datetime.now()
-        curr_time = timezone.make_aware(curr_time, timezone.get_current_timezone())
+        curr_time = datetime.now(tz=timezone.get_current_timezone())
         while True:
             yield curr_time
             curr_time = curr_time + timedelta(seconds=10)
