@@ -67,3 +67,19 @@ class GenerateAttacksCommand(object):
             curr_time = curr_time + timedelta(seconds=10)
 
 
+class AttackPullCommand(object):
+
+    def __init__(self):
+        pass
+
+    def execute(self):
+        pass
+
+
+class AttackParseCommand(object):
+
+    def __init__(self):
+        pass
+
+    def execute(self):
+        pass

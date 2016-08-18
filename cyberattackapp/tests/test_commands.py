@@ -1,5 +1,5 @@
 from django.test import TestCase
-from cyberattackapp.commands import GetAttacksCommand
+from cyberattackapp.commands import GetAttacksCommand, AttackPullCommand, AttackParseCommand
 
 
 class GetAttackCommandTestCase(TestCase):
@@ -22,3 +22,25 @@ class GetAttackCommandTestCase(TestCase):
         recent_attacks = self.get_attacks_command.execute()
         for attack in recent_attacks:
             self.assertListEqual(keys, sorted(list(attack.keys())))
+
+
+class AttackPullCommandTestCase(TestCase):
+
+    def setUp(self):
+        self.attack_pull_command = AttackPullCommand()
+
+    def test_execute(self):
+        res = self.attack_pull_command.execute()
+
+        self.assertEqual(res, None)
+
+
+class AttackParseCommandTestCase(TestCase):
+
+    def setUp(self):
+        self.attack_parse_command = AttackParseCommand()
+
+    def test_execute(self):
+        res = self.attack_parse_command.execute()
+
+        self.assertEqual(res, None)
