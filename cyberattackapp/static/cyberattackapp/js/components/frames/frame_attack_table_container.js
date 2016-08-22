@@ -13,7 +13,7 @@ FrameAttackTableContainer.prototype.init = function () {
 
     this.hidden_rows = [];
     this.visible_rows = [];
-    this.max_row_count = 4;
+    this.max_row_count = 3;
 };
 FrameAttackTableContainer.prototype.handle = function (event, data) {
     if (event === 'add_attack_row') {
@@ -22,24 +22,24 @@ FrameAttackTableContainer.prototype.handle = function (event, data) {
             var row_to_hide = this.visible_rows.shift();
             this.hide_table_row_by_element(row_to_hide);
             this.hidden_rows.push(row_to_hide);
-            if (this.hidden_rows.length > 4){
+            if (this.hidden_rows.length > 3){
                 this.remove_table_row_by_element(this.hidden_rows.shift());
             }
         }
     }
     else if (event == 'grow') {
-        this.max_row_count = 8;
+        this.max_row_count = 7;
         var hidden_row_length = this.hidden_rows.length;
         for (var i = 0; i < hidden_row_length; i++){
             var row_to_show = this.hidden_rows.shift();
             this.show_table_row_by_element(row_to_show);
-            this.visible_rows.splice(0, 0, row_to_show);
+            this.visible_rows.splice(i, 0, row_to_show);
         }
     }
     else if (event == 'shrink') {
-        this.max_row_count = 4;
-        var rows_to_show = this.visible_rows.slice(-4);
-        var rows_to_hide = this.visible_rows.slice(0, -4);
+        this.max_row_count = 3;
+        var rows_to_show = this.visible_rows.slice(-3);
+        var rows_to_hide = this.visible_rows.slice(0, -3);
         this.visible_rows = rows_to_show;
         this.hidden_rows = rows_to_hide;
         for (var i = 0; i < this.hidden_rows.length; i++){
