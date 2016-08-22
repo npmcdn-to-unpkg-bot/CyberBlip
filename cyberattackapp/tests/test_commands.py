@@ -32,9 +32,17 @@ class AttackPullCommandTestCase(TestCase):
     """
 
     def setUp(self):
+        """
+        Initialize testing data.
+        """
         self.attack_pull_command = AttackPullCommand()
 
     def test_execute(self):
+        """
+        Testing of the execute method.
+
+        :return: None
+        """
         res = self.attack_pull_command.execute()
 
         self.assertEqual(res, None)
@@ -46,9 +54,17 @@ class AttackParseCommandTestCase(TestCase):
     """
 
     def setUp(self):
+        """
+        Initialize testing data.
+        """
         self.attack_parse_command = AttackParseCommand()
 
     def test_execute(self):
+        """
+        Testing execute method.
+
+        :return: None
+        """
         res = self.attack_parse_command.execute()
 
         self.assertEqual(res, None)

@@ -71,6 +71,9 @@ class GenerateAttacksCommand(object):
 
 
 class AttackPullCommand(object):
+    """
+    A Command class for gathering attack data, being served by remote machines.
+    """
 
     def __init__(self):
         pass
@@ -80,6 +83,9 @@ class AttackPullCommand(object):
 
 
 class AttackParseCommand(object):
+    """
+    A parser, for use with attack data gathered by the AttackPullCommand() class.
+    """
 
     def __init__(self):
         pass
