@@ -33,7 +33,7 @@ FrameAttackTableContainer.prototype.handle = function (event, data) {
         for (var i = 0; i < hidden_row_length; i++){
             var row_to_show = this.hidden_rows.shift();
             this.show_table_row_by_element(row_to_show);
-            this.visible_rows.splice(0, 0, row_to_show);
+            this.visible_rows.splice(i, 0, row_to_show);
         }
     }
     else if (event == 'shrink') {
