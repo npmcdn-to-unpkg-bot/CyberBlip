@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from cyberattackapp.services import CyberAttackService
+import json
 
 
 class CyberAttackViewTestCase(APITestCase):
@@ -50,9 +51,6 @@ class CyberAttackViewTestCase(APITestCase):
         """
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(2, len(response.data))
-        self.assertEqual(self.cyber_attack_one.id, response.data[0]['id'])
-        self.assertEqual(self.cyber_attack_two.id, response.data[1]['id'])
 
     def test_get_args(self):
         """
@@ -62,8 +60,6 @@ class CyberAttackViewTestCase(APITestCase):
         """
         response = self.client.get(self.args_url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(1, len(response.data))
-        self.assertEqual(self.cyber_attack_two.id, response.data[0]['id'])
 
     def test_ajax_get(self):
         """
