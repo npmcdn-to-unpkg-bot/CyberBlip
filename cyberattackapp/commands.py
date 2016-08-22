@@ -9,6 +9,9 @@ class GetAttacksCommand(object):
     def __init__(self, **filter_args):
         """
         Initialize a new GetAttacksCommand instance.
+
+        :param filter_args: Arguments for filtering attack model query.
+        :type filter_args: dict
         """
         self.cyber_attack_service = CyberAttackService()
         self.filter = filter_args

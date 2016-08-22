@@ -15,6 +15,8 @@ class GetAttackCommandTestCase(TestCase):
     def test_execute(self):
         """
         Testing method for the temporary execute method.
+
+        :raise AssertionError: If the test fails.
         """
         keys = sorted(['timestamp', 'attacker_latitude', 'attacker_longitude', 'target_latitude', 'target_longitude',
                        'attacker_ip', 'service', 'port'])
@@ -25,6 +27,9 @@ class GetAttackCommandTestCase(TestCase):
 
 
 class AttackPullCommandTestCase(TestCase):
+    """
+    Unit testing class for the AttackPullCommand class.
+    """
 
     def setUp(self):
         self.attack_pull_command = AttackPullCommand()
@@ -36,6 +41,9 @@ class AttackPullCommandTestCase(TestCase):
 
 
 class AttackParseCommandTestCase(TestCase):
+    """
+    Unit testing class for the AttackParseCommand class.
+    """
 
     def setUp(self):
         self.attack_parse_command = AttackParseCommand()
