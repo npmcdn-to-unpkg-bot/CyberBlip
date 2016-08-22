@@ -171,10 +171,14 @@ class Service(object):
             if type(query_args[arg_name]) is list:
                 or_query = Q()
                 for arg in query_args[arg_name]:
+                    if len(arg) == 0:
+                        continue
                     or_query |= (Q(**{arg_name: arg}))
 
                 filter_query &= or_query
             else:
+                if len(query_args[arg_name]) == 0:
+                    continue
                 filter_query &= (Q(**{arg_name: query_args[arg_name]}))
 
         return filter_query

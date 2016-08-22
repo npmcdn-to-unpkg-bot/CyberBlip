@@ -19,6 +19,7 @@ FrameRoot.prototype.handle = function (event, data) {
         var start_time = null;
         (function(instance){
             $.get('cyberattacks', function (data) {
+                data = JSON.parse(data);
                 for (var i = 0; i < data.length; i++){
                     var attack = data[i];
                     var timestamp = String(attack['timestamp']).split(':');

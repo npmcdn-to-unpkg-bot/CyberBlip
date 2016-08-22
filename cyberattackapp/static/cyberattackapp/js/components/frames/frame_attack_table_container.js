@@ -4,6 +4,7 @@ function FrameAttackTableContainer(selector){
 FrameAttackTableContainer.prototype = Object.create(Frame.prototype);
 FrameAttackTableContainer.prototype.__super__frame__attacke__table__container__ = Frame;
 FrameAttackTableContainer.prototype.init = function () {
+    this.add_component('form_attack_filter', new FormAttackFilter($("#form_attack_filter")), true);
     this.add_component('table_attack', new TableAttack($("#table_attack")), true);
     this.add_component('table_timestamp', new TableTimeStamp($("#table_timestamp")), true);
     this.add_component('table_attacker', new TableAttacker($("#table_attacker")), true);

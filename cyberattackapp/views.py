@@ -1,21 +1,31 @@
+import json
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.renderers import JSONRenderer
 from .commands import GetAttacksCommand, GenerateAttacksCommand
 from .serializers import CyberAttackSerializer
 
 
-class CyberAttackView(ModelViewSet):
+class JSONResponse(HttpResponse):
+    """
+    An HttpResponse that renders its content into JSON.
+    """
+    def __init__(self, data, **kwargs):
+        content = JSONRenderer().render(data)
+        kwargs['content_type'] = 'application/json'
+        super(JSONResponse, self).__init__(content, **kwargs)
+
+
+class CyberAttackView(APIView):
     """
     A View class responsible for GET requests related to Cyber Attacks.
     """
-    queryset = GetAttacksCommand().execute()
-    serializer_class = CyberAttackSerializer
-    http_method_names = ['get']
-
-    def get_queryset(self):
-        queryset = GetAttacksCommand(**self.request.query_params).execute()
-        return queryset
+    def get(self, request):
+        cyber_attacks = GetAttacksCommand(**request.query_params).execute()
+        serializer = CyberAttackSerializer(cyber_attacks, many=True)
+        return JSONResponse(json.dumps(serializer.data))
 
 
 class CyberMapView(View):
