@@ -1,5 +1,7 @@
 function FrameRoot(selector){
     Frame.call(this, selector);
+    this.timeouts = [];
+    this.filter = '';
 }
 FrameRoot.prototype = Object.create(Frame.prototype);
 FrameRoot.prototype.__super__frame__root = Frame;
@@ -18,7 +20,7 @@ FrameRoot.prototype.handle = function (event, data) {
     if (event === 'update_attacks') {
         var start_time = null;
         (function(instance){
-            $.get('cyberattacks', function (data) {
+            $.get('cyberattacks', instance.filter, function (data) {
                 data = JSON.parse(data);
                 for (var i = 0; i < data.length; i++){
                     var attack = data[i];
@@ -38,9 +40,10 @@ FrameRoot.prototype.handle = function (event, data) {
                     }
                     else {
                         (function(curr_attack){
-                            setTimeout(function(){
+                            var timeout = setTimeout(function(){
                                 instance.handle('attack', curr_attack);
                             }, (this_time - start_time));
+                            instance.timeouts.push(timeout);
                         })(attack);
                     }
                 }
@@ -56,5 +59,12 @@ FrameRoot.prototype.handle = function (event, data) {
                 'target_latitude': data['target_latitude'],
                 'target_longitude': data['target_longitude'],
                 'info': data})
+    }
+    else if (event === 'apply_filter') {
+        for (var i = 0; i < this.timeouts.length; i++){
+            clearTimeout(this.timeouts[i]);
+        }
+        this.timeouts = [];
+        this.filter = data;
     }
 };

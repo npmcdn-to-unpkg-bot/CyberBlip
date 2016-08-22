@@ -47,6 +47,9 @@ FrameAttackTableContainer.prototype.handle = function (event, data) {
             this.hide_table_row_by_element(this.hidden_rows[i]);
         }
     }
+    else {
+        this.parent.handle(event, data);
+    }
 };
 FrameAttackTableContainer.prototype.show_table_row_by_element = function (row) {
     for (var i = 0; i < row.length; i++){

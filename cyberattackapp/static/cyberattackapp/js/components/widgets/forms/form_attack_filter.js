@@ -8,11 +8,9 @@ FormAttackFilter.prototype.init = function () {
     (function(instance){
         instance.selector.find(':input').keypress(function (e) {
             if (e.which == 13) {
-                instance.submit_form();
+                var serialized_form = instance.serialize_form();
+                instance.handle('apply_filter', serialized_form);
             }
         });
     })(this);
-};
-FormAttackFilter.prototype.response_success = function (response) {
-    /* do something */
 };
