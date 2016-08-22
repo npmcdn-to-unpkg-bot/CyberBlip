@@ -1,4 +1,7 @@
+import paramiko
+import json
 from datetime import datetime, timedelta
+from time import time, strftime
 from .services import CyberAttackService
 
 
@@ -79,7 +82,29 @@ class AttackPullCommand(object):
         pass
 
     def execute(self):
-        pass
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect('192.168.56.101', 22, username='reports', password='v1d4l14')
+
+        # Turn into a loop on its own thread
+        timenow = datetime.utcfromtimestamp(time())
+        tdelta = timedelta(minutes=2)
+        twominago = (timenow - tdelta).strftime('%Y-%m-%d %H:%M:00')
+
+        querystr = ' '.join(['192.168.56.103', 'class=SNORT', 'start:\'' + twominago + '\''])
+        #
+
+        commandstr = 'perl /opt/elsa/contrib/securityonion/contrib/cli.sh "' + querystr + '" | jq .'
+
+        si, so, se = client.exec_command(commandstr)
+
+        cleanoutput = ''
+
+        for line in so.readlines():
+            line.strip()
+            cleanoutput += line
+
+        return json.loads(cleanoutput)
 
 
 class AttackParseCommand(object):

@@ -40,12 +40,21 @@ class AttackPullCommandTestCase(TestCase):
     def test_execute(self):
         """
         Testing of the execute method.
-
-        :return: None
         """
+
+        # Should return a dictionary of data from a single ELSA query.
         res = self.attack_pull_command.execute()
 
-        self.assertEqual(res, None)
+        # Test if execute returns a dictionary
+        self.assertIsInstance(res, dict)
+
+        # Test if the output is as expected.
+        # If the query to ELSA completes correctly, the dictionary should
+        # come back with a top level key, value pair of
+        # "percentage_complete: 100"
+
+        self.assertTrue('percentage_complete' in res)
+        self.assertEqual(res['percentage_complete'], 100)
 
 
 class AttackParseCommandTestCase(TestCase):
