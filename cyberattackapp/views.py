@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from .commands import GetAttacksCommand, GenerateAttacksCommand
 from .serializers import CyberAttackSerializer
+from threading import Thread
+import time
 
 
 class JSONResponse(HttpResponse):

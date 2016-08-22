@@ -14,3 +14,6 @@ FormAttackFilter.prototype.init = function () {
         });
     })(this);
 };
+FormAttackFilter.prototype.response_success = function (response) {
+    /* do nothing */
+};
