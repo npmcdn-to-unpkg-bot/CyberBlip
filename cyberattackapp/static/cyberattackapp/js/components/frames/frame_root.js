@@ -40,7 +40,7 @@ FrameRoot.prototype.handle = function (event, data) {
                             var timeout = setTimeout(function(){
                                 instance.handle('attack', curr_attack);
                             }, (this_time.getTime() - start_time.getTime()));
-                            instance.timeouts.push(timeout);
+                            instance.timeouts.push(timeout, curr_attack);
                         }
                     })(attack);
                 }
@@ -58,10 +58,11 @@ FrameRoot.prototype.handle = function (event, data) {
                 'info': data})
     }
     else if (event === 'apply_filter') {
+        this.filter = data;
         for (var i = 0; i < this.timeouts.length; i++){
             clearTimeout(this.timeouts[i]);
         }
         this.timeouts = [];
-        this.filter = data;
+        this.handle('update_attacks');
     }
 };

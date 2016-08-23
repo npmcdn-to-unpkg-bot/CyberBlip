@@ -23,7 +23,14 @@ class CyberAttackView(APIView):
     A View class responsible for GET requests related to Cyber Attacks.
     """
     def get(self, request):
-        cyber_attacks = GetAttacksCommand(**request.query_params).execute()
+        query = dict(request.query_params)
+        for key, value in query.copy().items():
+            for item in value:
+                if len(item) == 0:
+                    value.remove(item)
+            if len(value) == 0:
+                del query[key]
+        cyber_attacks = GetAttacksCommand(**query).execute()
         serializer = CyberAttackSerializer(cyber_attacks, many=True)
         return JSONResponse(json.dumps(serializer.data))
 
@@ -32,7 +39,6 @@ class CyberMapView(View):
     """
     A View class responsible for rendering the Cyber Attack Map.
     """
-
     def get(self, request):
         GenerateAttacksCommand().execute()
         return render(request, "cyberattackapp/index.html")

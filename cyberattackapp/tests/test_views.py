@@ -41,7 +41,7 @@ class CyberAttackViewTestCase(APITestCase):
             service='SSH',
             port=43
         )
-        self.args_url = self.url + '?port=42&port=43&attacker_ip=127.0.0.43'
+        self.args_url = self.url + '?port=42&port=43&attacker_ip=127.0.0.43&target_ip='
 
     def test_get(self):
         """

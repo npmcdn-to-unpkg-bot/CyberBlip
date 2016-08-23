@@ -23,7 +23,10 @@ class GetAttacksCommand(object):
 
         :return: All the CyberAttacks in the database.
         """
-        return self.cyber_attack_service.list_models(**self.filter)
+        try:
+            return self.cyber_attack_service.list_models(**self.filter)
+        except AttributeError:
+            return self.cyber_attack_service.none()
 
 
 class GenerateAttacksCommand(object):
