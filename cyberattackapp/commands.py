@@ -39,7 +39,6 @@ class GenerateAttacksCommand(object):
 
     def _generate_attacks(self):
         while True:
-            print('GENERATE')
             self.cyber_attack_service.remove_models()
 
             attacker_lat_lngs = [(44.389661, -70.471819), (45.246879, -70.164202), (44.812069, -68.939226),

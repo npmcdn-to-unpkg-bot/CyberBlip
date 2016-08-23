@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from cyberattackapp.services import CyberAttackService
-import json
+from cyberattackapp.decorators import timeout
 
 
 class CyberAttackViewTestCase(APITestCase):
@@ -88,6 +88,10 @@ class CyberMapViewTestCase(APITestCase):
 
         :raise AssertionError: If the test fails.
         """
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'cyberattackapp/index.html')
+        @timeout()
+        def get_test():
+            response = self.client.get(self.url)
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'cyberattackapp/index.html')
+
+        get_test()

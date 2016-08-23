@@ -6,8 +6,6 @@ from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from .commands import GetAttacksCommand, GenerateAttacksCommand
 from .serializers import CyberAttackSerializer
-from threading import Thread
-import time
 
 
 class JSONResponse(HttpResponse):
@@ -34,6 +32,7 @@ class CyberMapView(View):
     """
     A View class responsible for rendering the Cyber Attack Map.
     """
+
     def get(self, request):
         GenerateAttacksCommand().execute()
         return render(request, "cyberattackapp/index.html")
