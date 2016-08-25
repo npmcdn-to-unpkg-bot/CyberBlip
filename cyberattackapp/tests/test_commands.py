@@ -37,7 +37,7 @@ class AttackPullCommandTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.attack_pull_command = AttackPullCommand(minutes=60)
+        self.attack_pull_command = AttackPullCommand()
 
     def test_execute(self):
         """
@@ -68,8 +68,9 @@ class AttackUpdateCommandTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.attack_parse_command = AttackUpdateCommand(minutes=60)
+        self.attack_update_command = AttackUpdateCommand(minutes=240)
         self.cyber_attack_service = CyberAttackService()
+        #self.cyber_attack_service.remove_models()
 
     def test_execute(self):
         """
@@ -77,11 +78,8 @@ class AttackUpdateCommandTestCase(TestCase):
 
         :return: None
         """
-        def execute_test():
-            self.attack_parse_command.execute()
-            self.assertGreater(0, len(self.cyber_attack_service.list_models()))
-
-        execute_test()
+        self.attack_update_command.execute()
+        self.assertGreater(0, len(self.cyber_attack_service.list_models()))
 
 
 class GoogleMapsReverseGeoCodingAPICommandTestCase(TestCase):

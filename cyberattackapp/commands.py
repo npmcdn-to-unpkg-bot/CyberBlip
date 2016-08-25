@@ -18,6 +18,7 @@ class GetAttacksCommand(object):
         :type filter_args: dict
         """
         self.cyber_attack_service = CyberAttackService()
+        self.update_attacks_command = AttackUpdateCommand()
         self.filter = filter_args.copy()
         self.filter.pop('format', None)
 
@@ -28,6 +29,7 @@ class GetAttacksCommand(object):
         :return: All the CyberAttacks in the database.
         """
         try:
+            self.update_attacks_command.execute()
             return self.cyber_attack_service.list_models(**self.filter)
         except AttributeError:
             return self.cyber_attack_service.none()
@@ -46,8 +48,6 @@ class GenerateAttacksCommand(object):
 
     def _generate_attacks(self):
         while True:
-            self.cyber_attack_service.remove_models()
-
             attacker_lat_lngs = [(44.389661, -70.471819), (45.246879, -70.164202), (44.812069, -68.939226),
                         (44.913302, -67.950457), (46.262518, -68.763445)]
             target_lat_lngs = [(43.643058, -70.257585), (43.643058, -70.257585), (43.643058, -70.257585),
@@ -94,7 +94,6 @@ class AttackPullCommand(object):
         self.minutes = minutes
 
     def execute(self):
-        print('halo')
         timenow = datetime.utcfromtimestamp(time.time())
         tdelta = timedelta(minutes=self.minutes)
         twominago = (timenow - tdelta).strftime('%Y-%m-%d %H:%M:00')
@@ -104,16 +103,12 @@ class AttackPullCommand(object):
         commandstr = 'perl /opt/elsa/contrib/securityonion/contrib/cli.sh "' + querystr + '" | jq .'
 
         si, so, se = self.client.exec_command(commandstr)
-        print(si)
-        print(so)
-        print(se)
         cleanoutput = ''
 
         for line in so.readlines():
             line.strip()
             cleanoutput += line
 
-        print(cleanoutput)
         return json.loads(cleanoutput)
 
 
@@ -131,95 +126,84 @@ class AttackUpdateCommand(object):
         """
         self.cyber_attack_service = CyberAttackService()
         self.attack_pull_command = AttackPullCommand(minutes=minutes)
-        self.t = Thread(target=self._update_attacks)
 
     def execute(self):
-        self.t.start()
-
-    def _update_attacks(self):
         """
         Parses attack data from AttackPullCommand and updates a CyberAttack model with it.
         """
-        print("="*100)
-        while True:
-            # Clear all CyberAttack models, and populate a dict with ELSA data from AttackPullCommand
+        # Clear all CyberAttack models, and populate a dict with ELSA data from AttackPullCommand
 
-            print('wtf')
-            self.cyber_attack_service.remove_models()
-            attacks_json_dict = self.attack_pull_command.execute()
-            print(attacks_json_dict)
-            # Output formatted dictionary, will serve as the **kwargs parameter
-            # to the create_model() call for CyberAttackService, at the end of the method.
-            out_dict = {}
+        attacks_json_dict = self.attack_pull_command.execute()
+        # Output formatted dictionary, will serve as the **kwargs parameter
+        # to the create_model() call for CyberAttackService, at the end of the method.
 
-            # Keys -> ELSA format : Values -> CyberBlip format
-            useful_fields = {'srcip':'attacker_ip',
-                             'srcport':'attacker_port',
-                             'dstip':'target_ip',
-                             'dstport':'port'}
+        out_dict = {}
 
-            # Opens up the dictionary and extracts what is needed.
-            # 'results' is what ELSA calls the list of attacks,
-            # meaning this loop is an iteration for each attack.
-            for r in attacks_json_dict['results']:
+        # Keys -> ELSA format : Values -> CyberBlip format
+        useful_fields = {'srcip':'attacker_ip',
+                         'srcport':'attacker_port',
+                         'dstip':'target_ip',
+                         'dstport':'port'}
 
-                # Timestamp is the first field extracted.
-                out_dict['timestamp'] = r['timestamp']
-                out_dict['id'] = r['id']
-                if self.cyber_attack_service.get_model(id=out_dict['id']):
-                    continue
-                # The '_fields' label, under which ELSA has organized the attack-relevant data,
-                # is searched for fields relevant to CyberBlip.
-                # Format, as well as name changes have to be made for these field labels, as
-                # ELSA uses a more complex representation than a single key, value pair.
-                for f in r['_fields']:
-                    if f['field'] in useful_fields:
-                        out_dict[useful_fields[f['field']]] = f['value']
+        # Opens up the dictionary and extracts what is needed.
+        # 'results' is what ELSA calls the list of attacks,
+        # meaning this loop is an iteration for each attack.
+        for r in attacks_json_dict['results']:
 
-                # If these keys don't exist, there's not enough data to process this attack's location.
-                # Discard and continue to next attack.
-                try:
-                    # Query freegeoip.net's RESTful API for location data based on IP
-                    fgip_dict = json.loads(requests.get('https://freegeoip.net/json/'+out_dict['attacker_ip']).text)
+            # Timestamp is the first field extracted.
+            out_dict['timestamp'] = r['timestamp']
+            out_dict['id'] = r['id']
+            if self.cyber_attack_service.get_model(id=out_dict['id']):
+                continue
+            # The '_fields' label, under which ELSA has organized the attack-relevant data,
+            # is searched for fields relevant to CyberBlip.
+            # Format, as well as name changes have to be made for these field labels, as
+            # ELSA uses a more complex representation than a single key, value pair.
+            for f in r['_fields']:
+                if f['field'] in useful_fields:
+                    out_dict[useful_fields[f['field']]] = f['value']
 
-                    # Copy longitude and latitude to the output dictionary.
-                    out_dict['attacker_latitude'] = fgip_dict['latitude']
-                    out_dict['attacker_longitude'] = fgip_dict['longitude']
-                except KeyError:
-                    continue
+            # If these keys don't exist, there's not enough data to process this attack's location.
+            # Discard and continue to next attack.
+            try:
+                # Query freegeoip.net's RESTful API for location data based on IP
+                fgip_dict = json.loads(requests.get('https://freegeoip.net/json/'+out_dict['attacker_ip']).text)
 
-                # Try to pull location data from freegeoip.net json
-                try:
-                    city = fgip_dict['city']
-                    region_code = fgip_dict['region_code']
-                    country_code = fgip_dict['country_code']
-                # If geo data is missing, do a reverse geocode lookup on the latlong.
-                except KeyError:
-                    city, region_code, country_code = \
-                        GoogleMapsReverseGeoCodingAPICommand(out_dict['attacker_latitude'],
-                                                             out_dict['attacker_longitude']).execute()
+                # Copy longitude and latitude to the output dictionary.
+                out_dict['attacker_latitude'] = fgip_dict['latitude']
+                out_dict['attacker_longitude'] = fgip_dict['longitude']
+            except KeyError:
+                continue
 
-                # If we have a fully qualified location.
-                if city and region_code and country_code:
-                    # Format to US standard: 'city, region_code, country_code'
-                    if country_code == 'US':
-                        out_dict['attacker_location'] = "{}, {}, {}".format(city, region_code, country_code)
-                    # Format to international standard: 'city, country_code'
-                    else:
-                        out_dict['attacker_location'] = "{}, {}".format(city, country_code)
-                # Otherwise, discard and continue onto the next attack.
+            # Try to pull location data from freegeoip.net json
+            if fgip_dict['city'] and fgip_dict['region_code'] and fgip_dict['country_code']:
+                city = fgip_dict['city']
+                region_code = fgip_dict['region_code']
+                country_code = fgip_dict['country_code']
+            # If geo data is missing, do a reverse geocode lookup on the latlong.
+            else:
+                city, region_code, country_code = \
+                    GoogleMapsReverseGeoCodingAPICommand(out_dict['attacker_latitude'],
+                                                         out_dict['attacker_longitude']).execute()
+
+            # If we have a fully qualified location.
+            if city and region_code and country_code:
+                # Format to US standard: 'city, region_code, country_code'
+                if country_code == 'US':
+                    out_dict['attacker_location'] = "{}, {}, {}".format(city, region_code, country_code)
+                # Format to international standard: 'city, country_code'
                 else:
-                    continue
+                    out_dict['attacker_location'] = "{}, {}".format(city, country_code)
+            # Otherwise, discard and continue onto the next attack.
+            else:
+                continue
 
-                # Stub variable for the service, as it is implemented on the front end, but not yet the back end.
-                out_dict['service'] = 'unknown'
+            # Stub variable for the service, as it is implemented on the front end, but not yet the back end.
+            out_dict['service'] = 'unknown'
 
-                # Add the fully qualified CyberAttack to the models, and clear the dictionary for the next attack.
-                self.cyber_attack_service.create_model(**out_dict)
-                out_dict.clear()
-
-            # Sleep
-            time.sleep(60)
+            # Add the fully qualified CyberAttack to the models, and clear the dictionary for the next attack.
+            self.cyber_attack_service.create_model(**out_dict)
+            out_dict.clear()
 
 
 class GoogleMapsReverseGeoCodingAPICommand(object):

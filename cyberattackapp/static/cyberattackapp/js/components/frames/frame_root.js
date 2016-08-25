@@ -18,6 +18,10 @@ FrameRoot.prototype.init = function () {
 };
 FrameRoot.prototype.handle = function (event, data) {
     if (event === 'update_attacks') {
+        for (var i = 0; i < this.timeouts.length; i++){
+            clearTimeout(this.timeouts[i]);
+        }
+        this.timeouts = [];
         (function(instance){
             $.get('cyberattacks', instance.filter, function (attack_data) {
                 var start_time = new Date();
@@ -59,10 +63,6 @@ FrameRoot.prototype.handle = function (event, data) {
     }
     else if (event === 'apply_filter') {
         this.filter = data;
-        for (var i = 0; i < this.timeouts.length; i++){
-            clearTimeout(this.timeouts[i]);
-        }
-        this.timeouts = [];
         this.handle('update_attacks');
     }
 };

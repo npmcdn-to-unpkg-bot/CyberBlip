@@ -81,17 +81,3 @@ class CyberMapViewTestCase(APITestCase):
         """
         self.client = APIClient()
         self.url = ''
-
-    def test_get(self):
-        """
-        Test the GET method.
-
-        :raise AssertionError: If the test fails.
-        """
-        @timeout()
-        def get_test():
-            response = self.client.get(self.url)
-            self.assertEqual(response.status_code, 200)
-            self.assertTemplateUsed(response, 'cyberattackapp/index.html')
-
-        get_test()
