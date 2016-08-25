@@ -4,6 +4,7 @@ function FrameAttackTableContainer(selector){
 FrameAttackTableContainer.prototype = Object.create(Frame.prototype);
 FrameAttackTableContainer.prototype.__super__frame__attacke__table__container__ = Frame;
 FrameAttackTableContainer.prototype.init = function () {
+    this.add_component('form_attack_filter', new FormAttackFilter($("#form_attack_filter")), true);
     this.add_component('table_attack', new TableAttack($("#table_attack")), true);
     this.add_component('table_timestamp', new TableTimeStamp($("#table_timestamp")), true);
     this.add_component('table_attacker', new TableAttacker($("#table_attacker")), true);
@@ -45,6 +46,9 @@ FrameAttackTableContainer.prototype.handle = function (event, data) {
         for (var i = 0; i < this.hidden_rows.length; i++){
             this.hide_table_row_by_element(this.hidden_rows[i]);
         }
+    }
+    else {
+        this.parent.handle(event, data);
     }
 };
 FrameAttackTableContainer.prototype.show_table_row_by_element = function (row) {

@@ -1,0 +1,520 @@
+{
+  "tokenizer_punct_chars": [
+    "-",
+    ".",
+    "@",
+    "_"
+  ],
+  "approximate": 0,
+  "percentage_complete": 100,
+  "recordsReturned": 6,
+  "query_string": "192.168.56.103 class=SNORT start:'2016-08-22 19:21:00'",
+  "hash": "25af6174a0fcecc4d346680a72b7ce644b9a88e8",
+  "query_meta_params": {},
+  "orderby_dir": "ASC",
+  "totalRecords": 6,
+  "results": [
+    {
+      "datasource": "Sphinx",
+      "program": "snort",
+      "msg": "[1:2010937:2] ET POLICY Suspicious inbound to mySQL port 3306 [Classification: Potentially Bad Traffic] [Priority: 2]: {TCP} 192.168.56.1:45224 -> 192.168.56.103:3306",
+      "node_id": 2130706433,
+      "node": "127.0.0.1",
+      "_orderby": "1471893693",
+      "host_id": "2130706433",
+      "host": "127.0.0.1",
+      "timestamp": "1471893693",
+      "_fields": [
+        {
+          "class": "any",
+          "value": "127.0.0.1",
+          "field": "host"
+        },
+        {
+          "value": "snort",
+          "class": "any",
+          "field": "program"
+        },
+        {
+          "value": "SNORT",
+          "class": "any",
+          "field": "class"
+        },
+        {
+          "value": "2",
+          "class": "SNORT",
+          "field": "sig_priority"
+        },
+        {
+          "class": "SNORT",
+          "value": "TCP",
+          "field": "proto"
+        },
+        {
+          "field": "srcip",
+          "value": "192.168.56.1",
+          "class": "SNORT"
+        },
+        {
+          "value": "45224",
+          "class": "SNORT",
+          "field": "srcport"
+        },
+        {
+          "field": "dstip",
+          "class": "SNORT",
+          "value": "192.168.56.103"
+        },
+        {
+          "class": "SNORT",
+          "value": "3306",
+          "field": "dstport"
+        },
+        {
+          "value": "1:2010937:2",
+          "class": "SNORT",
+          "field": "sig_sid"
+        },
+        {
+          "field": "sig_msg",
+          "value": "ET POLICY Suspicious inbound to mySQL port 3306 ",
+          "class": "SNORT"
+        },
+        {
+          "class": "SNORT",
+          "value": "Potentially Bad Traffic",
+          "field": "sig_classification"
+        },
+        {
+          "field": "interface",
+          "class": "SNORT",
+          "value": ""
+        }
+      ],
+      "class_id": "8",
+      "id": "73409",
+      "program_id": "2856570750"
+    },
+    {
+      "datasource": "Sphinx",
+      "program": "snort",
+      "node_id": 2130706433,
+      "msg": "[1:2010939:2] ET POLICY Suspicious inbound to PostgreSQL port 5432 [Classification: Potentially Bad Traffic] [Priority: 2]: {TCP} 192.168.56.1:43376 -> 192.168.56.103:5432",
+      "node": "127.0.0.1",
+      "_orderby": "1471893693",
+      "host_id": "2130706433",
+      "host": "127.0.0.1",
+      "_fields": [
+        {
+          "value": "127.0.0.1",
+          "class": "any",
+          "field": "host"
+        },
+        {
+          "field": "program",
+          "class": "any",
+          "value": "snort"
+        },
+        {
+          "field": "class",
+          "value": "SNORT",
+          "class": "any"
+        },
+        {
+          "value": "2",
+          "class": "SNORT",
+          "field": "sig_priority"
+        },
+        {
+          "field": "proto",
+          "class": "SNORT",
+          "value": "TCP"
+        },
+        {
+          "field": "srcip",
+          "class": "SNORT",
+          "value": "192.168.56.1"
+        },
+        {
+          "class": "SNORT",
+          "value": "43376",
+          "field": "srcport"
+        },
+        {
+          "field": "dstip",
+          "value": "192.168.56.103",
+          "class": "SNORT"
+        },
+        {
+          "value": "5432",
+          "class": "SNORT",
+          "field": "dstport"
+        },
+        {
+          "value": "1:2010939:2",
+          "class": "SNORT",
+          "field": "sig_sid"
+        },
+        {
+          "field": "sig_msg",
+          "value": "ET POLICY Suspicious inbound to PostgreSQL port 5432 ",
+          "class": "SNORT"
+        },
+        {
+          "value": "Potentially Bad Traffic",
+          "class": "SNORT",
+          "field": "sig_classification"
+        },
+        {
+          "field": "interface",
+          "value": "",
+          "class": "SNORT"
+        }
+      ],
+      "timestamp": "1471893693",
+      "program_id": "2856570750",
+      "class_id": "8",
+      "id": "73410"
+    },
+    {
+      "timestamp": "1471893693",
+      "_fields": [
+        {
+          "value": "127.0.0.1",
+          "class": "any",
+          "field": "host"
+        },
+        {
+          "field": "program",
+          "value": "snort",
+          "class": "any"
+        },
+        {
+          "value": "SNORT",
+          "class": "any",
+          "field": "class"
+        },
+        {
+          "field": "sig_priority",
+          "class": "SNORT",
+          "value": "2"
+        },
+        {
+          "class": "SNORT",
+          "value": "TCP",
+          "field": "proto"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.1",
+          "field": "srcip"
+        },
+        {
+          "field": "srcport",
+          "class": "SNORT",
+          "value": "38832"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.103",
+          "field": "dstip"
+        },
+        {
+          "field": "dstport",
+          "value": "5911",
+          "class": "SNORT"
+        },
+        {
+          "value": "1:2002911:5",
+          "class": "SNORT",
+          "field": "sig_sid"
+        },
+        {
+          "field": "sig_msg",
+          "value": "ET SCAN Potential VNC Scan 5900-5920 ",
+          "class": "SNORT"
+        },
+        {
+          "value": "Attempted Information Leak",
+          "class": "SNORT",
+          "field": "sig_classification"
+        },
+        {
+          "value": "",
+          "class": "SNORT",
+          "field": "interface"
+        }
+      ],
+      "id": "73411",
+      "class_id": "8",
+      "program_id": "2856570750",
+      "node": "127.0.0.1",
+      "program": "snort",
+      "msg": "[1:2002911:5] ET SCAN Potential VNC Scan 5900-5920 [Classification: Attempted Information Leak] [Priority: 2]: {TCP} 192.168.56.1:38832 -> 192.168.56.103:5911",
+      "node_id": 2130706433,
+      "datasource": "Sphinx",
+      "_orderby": "1471893693",
+      "host_id": "2130706433",
+      "host": "127.0.0.1"
+    },
+    {
+      "node_id": 2130706433,
+      "msg": "[1:2010936:2] ET POLICY Suspicious inbound to Oracle SQL port 1521 [Classification: Potentially Bad Traffic] [Priority: 2]: {TCP} 192.168.56.1:50452 -> 192.168.56.103:1521",
+      "program": "snort",
+      "datasource": "Sphinx",
+      "node": "127.0.0.1",
+      "host_id": "2130706433",
+      "_orderby": "1471893693",
+      "program_id": "2856570750",
+      "class_id": "8",
+      "id": "73412",
+      "timestamp": "1471893693",
+      "_fields": [
+        {
+          "value": "127.0.0.1",
+          "class": "any",
+          "field": "host"
+        },
+        {
+          "value": "snort",
+          "class": "any",
+          "field": "program"
+        },
+        {
+          "field": "class",
+          "class": "any",
+          "value": "SNORT"
+        },
+        {
+          "class": "SNORT",
+          "value": "2",
+          "field": "sig_priority"
+        },
+        {
+          "class": "SNORT",
+          "value": "TCP",
+          "field": "proto"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.1",
+          "field": "srcip"
+        },
+        {
+          "field": "srcport",
+          "class": "SNORT",
+          "value": "50452"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.103",
+          "field": "dstip"
+        },
+        {
+          "field": "dstport",
+          "value": "1521",
+          "class": "SNORT"
+        },
+        {
+          "field": "sig_sid",
+          "value": "1:2010936:2",
+          "class": "SNORT"
+        },
+        {
+          "class": "SNORT",
+          "value": "ET POLICY Suspicious inbound to Oracle SQL port 1521 ",
+          "field": "sig_msg"
+        },
+        {
+          "field": "sig_classification",
+          "class": "SNORT",
+          "value": "Potentially Bad Traffic"
+        },
+        {
+          "class": "SNORT",
+          "value": "",
+          "field": "interface"
+        }
+      ],
+      "host": "127.0.0.1"
+    },
+    {
+      "datasource": "Sphinx",
+      "program": "snort",
+      "msg": "[1:2010935:2] ET POLICY Suspicious inbound to MSSQL port 1433 [Classification: Potentially Bad Traffic] [Priority: 2]: {TCP} 192.168.56.1:56560 -> 192.168.56.103:1433",
+      "node_id": 2130706433,
+      "node": "127.0.0.1",
+      "_orderby": "1471893694",
+      "host_id": "2130706433",
+      "host": "127.0.0.1",
+      "_fields": [
+        {
+          "field": "host",
+          "value": "127.0.0.1",
+          "class": "any"
+        },
+        {
+          "field": "program",
+          "value": "snort",
+          "class": "any"
+        },
+        {
+          "field": "class",
+          "class": "any",
+          "value": "SNORT"
+        },
+        {
+          "field": "sig_priority",
+          "class": "SNORT",
+          "value": "2"
+        },
+        {
+          "field": "proto",
+          "class": "SNORT",
+          "value": "TCP"
+        },
+        {
+          "value": "192.168.56.1",
+          "class": "SNORT",
+          "field": "srcip"
+        },
+        {
+          "field": "srcport",
+          "class": "SNORT",
+          "value": "56560"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.103",
+          "field": "dstip"
+        },
+        {
+          "class": "SNORT",
+          "value": "1433",
+          "field": "dstport"
+        },
+        {
+          "field": "sig_sid",
+          "class": "SNORT",
+          "value": "1:2010935:2"
+        },
+        {
+          "field": "sig_msg",
+          "value": "ET POLICY Suspicious inbound to MSSQL port 1433 ",
+          "class": "SNORT"
+        },
+        {
+          "field": "sig_classification",
+          "value": "Potentially Bad Traffic",
+          "class": "SNORT"
+        },
+        {
+          "field": "interface",
+          "class": "SNORT",
+          "value": ""
+        }
+      ],
+      "timestamp": "1471893694",
+      "class_id": "8",
+      "id": "73413",
+      "program_id": "2856570750"
+    },
+    {
+      "datasource": "Sphinx",
+      "msg": "[1:2002910:5] ET SCAN Potential VNC Scan 5800-5820 [Classification: Attempted Information Leak] [Priority: 2]: {TCP} 192.168.56.1:58772 -> 192.168.56.103:5801",
+      "node_id": 2130706433,
+      "program": "snort",
+      "node": "127.0.0.1",
+      "_orderby": "1471893694",
+      "host_id": "2130706433",
+      "host": "127.0.0.1",
+      "id": "73414",
+      "class_id": "8",
+      "program_id": "2856570750",
+      "timestamp": "1471893694",
+      "_fields": [
+        {
+          "field": "host",
+          "class": "any",
+          "value": "127.0.0.1"
+        },
+        {
+          "class": "any",
+          "value": "snort",
+          "field": "program"
+        },
+        {
+          "field": "class",
+          "class": "any",
+          "value": "SNORT"
+        },
+        {
+          "field": "sig_priority",
+          "value": "2",
+          "class": "SNORT"
+        },
+        {
+          "field": "proto",
+          "class": "SNORT",
+          "value": "TCP"
+        },
+        {
+          "field": "srcip",
+          "value": "192.168.56.1",
+          "class": "SNORT"
+        },
+        {
+          "class": "SNORT",
+          "value": "58772",
+          "field": "srcport"
+        },
+        {
+          "class": "SNORT",
+          "value": "192.168.56.103",
+          "field": "dstip"
+        },
+        {
+          "field": "dstport",
+          "value": "5801",
+          "class": "SNORT"
+        },
+        {
+          "value": "1:2002910:5",
+          "class": "SNORT",
+          "field": "sig_sid"
+        },
+        {
+          "field": "sig_msg",
+          "value": "ET SCAN Potential VNC Scan 5800-5820 ",
+          "class": "SNORT"
+        },
+        {
+          "field": "sig_classification",
+          "class": "SNORT",
+          "value": "Attempted Information Leak"
+        },
+        {
+          "class": "SNORT",
+          "value": "",
+          "field": "interface"
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "peers": {
+      "127.0.0.1": {
+        "total_request_time": 0.0155069828033447,
+        "get_info": "0.0186879634857178"
+      }
+    },
+    "get_info": "0.0186879634857178"
+  },
+  "highlights": {
+    "SNORT": 1,
+    "192.168.56.103": 1
+  },
+  "qid": "1404",
+  "totalTime": 20
+}
+

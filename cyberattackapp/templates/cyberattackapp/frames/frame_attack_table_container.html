@@ -1,62 +1,64 @@
 <div id="frame_attack_table_container">
-    <table id="table_attack">
-        <tbody>
-            <tr>
-                <td  style="width: 14%">
-                    <table id="table_timestamp" class="other">
-                        <caption class="subtableheader">Timestamp</caption>
-                        <thead class="subtableheader">
-                            <tr><th>HH:MM:SS</th></tr>
-                            <tr><th><input type="text" placeholder="Enter Filter Here"></th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </td>
-                <td  style="width: 43%">
-                    <table id="table_attacker" class="attacker">
-                        <caption>Attacker</caption>
-                        <thead class="subtableheader">
-                            <tr>
-                                <th>Organization</th>
-                                <th>Location</th>
-                                <th>IP</th>
-                            <tr>
-                            <tr>
-                                <th><input type="text" placeholder="Enter Filter Here"></th>
-                                <th><input type="text" placeholder="Enter Filter Here"></th>
-                                <th><input type="text" placeholder="Enter Filter Here"></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </td>
-                <td  style="width: 14%">
-                    <table id="table_target" class="target">
-                        <caption class="subtableheader">Target</caption>
-                        <thead class="subtableheader">
-                            <tr><th>Location</th></tr>
-                            <tr><th><input type="text" placeholder="Enter Filter Here"></th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </td>
-                <td  style="width: 28%;">
-                    <table id="table_type" class="other">
-                        <caption class="subtableheader">Type</caption>
-                        <thead class="subtableheader">
-                            <tr>
-                                <th>Service</th>
-                                <th>Port</th>
-                            </tr>
-                            <tr>
-                                <th><input type="text" placeholder="Enter Filter Here"></th>
-                                <th><input type="text" placeholder="Enter Filter Here"></th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <form id='form_attack_filter' action="cyberattacks">
+        <table id="table_attack">
+            <tbody>
+                <tr>
+                    <td  style="width: 14%">
+                        <table id="table_timestamp" class="other">
+                            <caption class="subtableheader">Timestamp</caption>
+                            <thead class="subtableheader">
+                                <tr><th>HH:MM:SS</th></tr>
+                                <tr><th><input type="text" name="timestamp" placeholder="Enter Filter Here"></th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                    <td  style="width: 43%">
+                        <table id="table_attacker" class="attacker">
+                            <caption>Attacker</caption>
+                            <thead class="subtableheader">
+                                <tr>
+                                    <th>Organization</th>
+                                    <th>Location</th>
+                                    <th>IP</th>
+                                <tr>
+                                <tr>
+                                    <th><input type="text" name="organization" placeholder="Enter Filter Here"></th>
+                                    <th><input type="text" name="attacker_location" placeholder="Enter Filter Here"></th>
+                                    <th><input type="text" name="attacker_ip" placeholder="Enter Filter Here"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                    <td  style="width: 14%">
+                        <table id="table_target" class="target">
+                            <caption class="subtableheader">Target</caption>
+                            <thead class="subtableheader">
+                                <tr><th>Location</th></tr>
+                                <tr><th><input type="text" name="target_location" placeholder="Enter Filter Here"></th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                    <td  style="width: 28%;">
+                        <table id="table_type" class="other">
+                            <caption class="subtableheader">Type</caption>
+                            <thead class="subtableheader">
+                                <tr>
+                                    <th>Service</th>
+                                    <th>Port</th>
+                                </tr>
+                                <tr>
+                                    <th><input type="text" name="service" placeholder="Enter Filter Here"></th>
+                                    <th><input type="text" name="port" placeholder="Enter Filter Here"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 </div>

@@ -68,3 +68,6 @@ caption, .basetableheader {
     color: #5B31B0;
     background-color: #DACBF9;
 }
+.filtered {
+    background-color: white; !important;
+}

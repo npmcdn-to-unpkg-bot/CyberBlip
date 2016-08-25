@@ -1,4 +1,5 @@
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, FieldDoesNotExist, FieldError
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, FieldDoesNotExist, FieldError, \
+    ValidationError
 from django.db import IntegrityError
 from django.db.models import Q
 from .models import CyberAttack
@@ -118,6 +119,8 @@ class Service(object):
             return self.model.objects.filter(self._parse_query(**kwargs))
         except FieldError:
             raise AttributeError('Field does not exist')
+        except ValidationError:
+            raise AttributeError('Invalid value')
 
     def count_models(self, **kwargs):
         """
@@ -169,6 +172,8 @@ class Service(object):
         filter_query = Q()
         for arg_name in query_args:
             if type(query_args[arg_name]) is list:
+                if len(query_args[arg_name]) == 0:
+                    continue
                 or_query = Q()
                 for arg in query_args[arg_name]:
                     or_query |= (Q(**{arg_name: arg}))
