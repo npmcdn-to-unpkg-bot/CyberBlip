@@ -15,6 +15,7 @@ class ServiceTestCase(TestCase):
         Initialize testing data.
         """
         self.service = Service(CyberAttack)
+        self.service.remove_models()
         self.cyber_attack_generator = self._generate_attacks()
         self.generator_count = 0
 
@@ -22,6 +23,7 @@ class ServiceTestCase(TestCase):
         while True:
             self.generator_count += 1
             yield self.service.create_model(
+                id=str(self.generator_count),
                 timestamp=datetime.now(tz=timezone.get_current_timezone()),
                 attacker_latitude=43,
                 attacker_longitude=-70,

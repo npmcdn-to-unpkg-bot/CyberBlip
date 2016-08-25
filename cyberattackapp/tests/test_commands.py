@@ -1,5 +1,7 @@
 from django.test import TestCase
 from cyberattackapp.commands import GetAttacksCommand, AttackPullCommand, AttackUpdateCommand, GoogleMapsReverseGeoCodingAPICommand
+from cyberattackapp.decorators import timeout
+from cyberattackapp.services import CyberAttackService
 
 
 class GetAttackCommandTestCase(TestCase):
@@ -35,7 +37,7 @@ class AttackPullCommandTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.attack_pull_command = AttackPullCommand()
+        self.attack_pull_command = AttackPullCommand(minutes=60)
 
     def test_execute(self):
         """
@@ -66,7 +68,8 @@ class AttackUpdateCommandTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.attack_parse_command = AttackUpdateCommand()
+        self.attack_parse_command = AttackUpdateCommand(minutes=60)
+        self.cyber_attack_service = CyberAttackService()
 
     def test_execute(self):
         """
@@ -74,9 +77,11 @@ class AttackUpdateCommandTestCase(TestCase):
 
         :return: None
         """
-        res = self.attack_parse_command.execute()
+        def execute_test():
+            self.attack_parse_command.execute()
+            self.assertGreater(0, len(self.cyber_attack_service.list_models()))
 
-        self.assertEqual(res, None)
+        execute_test()
 
 
 class GoogleMapsReverseGeoCodingAPICommandTestCase(TestCase):

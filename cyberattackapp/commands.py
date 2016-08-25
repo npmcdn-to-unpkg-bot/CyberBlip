@@ -1,10 +1,8 @@
 import paramiko, json, requests, time
-from threading import Thread
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django.conf import settings
 from .services import CyberAttackService
-import time
 from threading import Thread
 
 
@@ -89,29 +87,33 @@ class AttackPullCommand(object):
     """
     A Command class for gathering attack data, being served by remote machines.
     """
-    def __init__(self):
+    def __init__(self, minutes=2):
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.client.connect('192.168.56.101', 22, username='reports', password='v1d4l14')
+        self.minutes = minutes
 
     def execute(self):
-
+        print('halo')
         timenow = datetime.utcfromtimestamp(time.time())
-        tdelta = timedelta(minutes=2)
+        tdelta = timedelta(minutes=self.minutes)
         twominago = (timenow - tdelta).strftime('%Y-%m-%d %H:%M:00')
 
-        querystr = ' '.join(['192.168.56.103', 'class=SNORT', 'start:\'' + twominago + '\''])
+        querystr = ' '.join(["192.168.56.103", "class=SNORT", "start:'" + twominago + "'"])
 
         commandstr = 'perl /opt/elsa/contrib/securityonion/contrib/cli.sh "' + querystr + '" | jq .'
 
         si, so, se = self.client.exec_command(commandstr)
-
+        print(si)
+        print(so)
+        print(se)
         cleanoutput = ''
 
         for line in so.readlines():
             line.strip()
             cleanoutput += line
 
+        print(cleanoutput)
         return json.loads(cleanoutput)
 
 
@@ -120,7 +122,7 @@ class AttackUpdateCommand(object):
     A parser, for use with attack data gathered by the AttackPullCommand() class.
     """
 
-    def __init__(self):
+    def __init__(self, minutes=2):
         """
         Initialize a CyberAttackService instance, an AttackPullCommand instance, and a Thread.
 
@@ -128,8 +130,8 @@ class AttackUpdateCommand(object):
         AttackPullCommand instance will be called from within a program loop.
         """
         self.cyber_attack_service = CyberAttackService()
-        self.attack_pull_command = AttackPullCommand()
-        self.t = Thread(target=self._update_attacks())
+        self.attack_pull_command = AttackPullCommand(minutes=minutes)
+        self.t = Thread(target=self._update_attacks)
 
     def execute(self):
         self.t.start()
@@ -138,12 +140,14 @@ class AttackUpdateCommand(object):
         """
         Parses attack data from AttackPullCommand and updates a CyberAttack model with it.
         """
-
+        print("="*100)
         while True:
             # Clear all CyberAttack models, and populate a dict with ELSA data from AttackPullCommand
+
+            print('wtf')
             self.cyber_attack_service.remove_models()
             attacks_json_dict = self.attack_pull_command.execute()
-
+            print(attacks_json_dict)
             # Output formatted dictionary, will serve as the **kwargs parameter
             # to the create_model() call for CyberAttackService, at the end of the method.
             out_dict = {}
