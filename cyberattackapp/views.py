@@ -23,6 +23,7 @@ class CyberMapView(View):
     A View class responsible for rendering the Cyber Attack Map.
     """
     def get(self, request):
+        # TODO: Replace GenerateAttacksCommand() with AttackUpdateCommand() loop (needs to be in its own thread)
         GenerateAttacksCommand().execute()
         return render(request, "cyberattackapp/index.html")
 

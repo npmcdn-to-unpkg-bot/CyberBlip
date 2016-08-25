@@ -18,6 +18,7 @@ class CyberAttack(models.Model):
         - service: models.CharField(max_length=100)
         - port: models.DecimalField(max_digits=15, decimal_places=0)
     """
+    id = models.CharField(max_length=100, primary_key=True)
     timestamp = models.DateTimeField()
     attacker_ip = models.CharField(max_length=100)
     attacker_latitude = models.DecimalField(max_digits=15, decimal_places=6)

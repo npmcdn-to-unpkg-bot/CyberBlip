@@ -1,5 +1,5 @@
 from django.test import TestCase
-from cyberattackapp.commands import GetAttacksCommand, AttackPullCommand, AttackParseCommand
+from cyberattackapp.commands import GetAttacksCommand, AttackPullCommand, AttackUpdateCommand, GoogleMapsReverseGeoCodingAPICommand
 
 
 class GetAttackCommandTestCase(TestCase):
@@ -57,16 +57,16 @@ class AttackPullCommandTestCase(TestCase):
         self.assertEqual(res['percentage_complete'], 100)
 
 
-class AttackParseCommandTestCase(TestCase):
+class AttackUpdateCommandTestCase(TestCase):
     """
-    Unit testing class for the AttackParseCommand class.
+    Unit testing class for the AttackUpdateCommand class.
     """
 
     def setUp(self):
         """
         Initialize testing data.
         """
-        self.attack_parse_command = AttackParseCommand()
+        self.attack_parse_command = AttackUpdateCommand()
 
     def test_execute(self):
         """
@@ -77,3 +77,26 @@ class AttackParseCommandTestCase(TestCase):
         res = self.attack_parse_command.execute()
 
         self.assertEqual(res, None)
+
+
+class GoogleMapsReverseGeoCodingAPICommandTestCase(TestCase):
+    """
+    Unit testing class for the GoogleMapsReverseGeoCodingAPICommand class.
+    """
+
+    def setUp(self):
+        """
+        Initialize testing data.
+        """
+        self.map_command = GoogleMapsReverseGeoCodingAPICommand(43.6632770000, -70.2761990000)
+
+    def test_execute(self):
+        """
+        Test the execute method.
+        @raise AssertionError: If the test fails.
+        """
+        city, state, country = self.map_command.execute()
+
+        self.assertEquals('Portland', city)
+        self.assertEquals('ME', state)
+        self.assertEquals('US', country)
