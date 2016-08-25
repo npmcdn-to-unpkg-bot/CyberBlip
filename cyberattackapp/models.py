@@ -1,6 +1,27 @@
 from django.db import models
 
 
+class Target(models.Model):
+    target_ip = models.CharField(max_length=100, primary_key=True)
+    target_latitude = models.DecimalField(max_digits=15, decimal_places=6)
+    target_longitude = models.DecimalField(max_digits=15, decimal_places=6)
+    target_location = models.CharField(max_length=100)
+
+    @classmethod
+    def create(cls, **kwargs):
+        """
+        Create a new Target instance.
+
+        :param kwargs: Arguments for object creation.
+        :return: A new Target instance.
+        :rtype: Target
+        """
+        return cls(**kwargs)
+
+    class Meta:
+        ordering = ['target_ip']
+
+
 class CyberAttack(models.Model):
     """
     Model class representing cyber attack data.
@@ -24,11 +45,10 @@ class CyberAttack(models.Model):
     attacker_latitude = models.DecimalField(max_digits=15, decimal_places=6)
     attacker_longitude = models.DecimalField(max_digits=15, decimal_places=6)
     attacker_location = models.CharField(max_length=100)
-    target_latitude = models.DecimalField(max_digits=15, decimal_places=6)
-    target_longitude = models.DecimalField(max_digits=15, decimal_places=6)
-    target_location = models.CharField(max_length=100)
     service = models.CharField(max_length=100)
-    port = models.DecimalField(max_digits=15, decimal_places=0)
+    attacker_port = models.DecimalField(max_digits=15, decimal_places=0)
+    target_port = models.DecimalField(max_digits=15, decimal_places=0)
+    target = models.ForeignKey(Target)
 
     @classmethod
     def create(cls, **kwargs):
@@ -43,5 +63,3 @@ class CyberAttack(models.Model):
 
     class Meta:
         ordering = ['timestamp']
-
-

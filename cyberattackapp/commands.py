@@ -2,7 +2,7 @@ import paramiko, json, requests, time
 from datetime import datetime, timedelta
 from django.utils import timezone
 from django.conf import settings
-from .services import CyberAttackService
+from .services import CyberAttackService, TargetService
 from threading import Thread
 
 
@@ -112,6 +112,17 @@ class AttackPullCommand(object):
         return json.loads(cleanoutput)
 
 
+class PopulateTargetsCommand(object):
+
+    def __init__(self):
+        self.target_service = TargetService()
+
+    def execute(self):
+        for h in settings.HONEYPOTS:
+            if not self.target_service.get_model(target_ip=h['target_ip']):
+                self.target_service.create_model(**h)
+
+
 class AttackUpdateCommand(object):
     """
     A parser, for use with attack data gathered by the AttackPullCommand() class.
@@ -126,6 +137,9 @@ class AttackUpdateCommand(object):
         """
         self.cyber_attack_service = CyberAttackService()
         self.attack_pull_command = AttackPullCommand(minutes=minutes)
+        self.target_service = TargetService()
+        self.populate_targets_command = PopulateTargetsCommand()
+        self.populate_targets_command.execute()
 
     def execute(self):
         """
@@ -142,8 +156,7 @@ class AttackUpdateCommand(object):
         # Keys -> ELSA format : Values -> CyberBlip format
         useful_fields = {'srcip':'attacker_ip',
                          'srcport':'attacker_port',
-                         'dstip':'target_ip',
-                         'dstport':'port'}
+                         'dstport':'target_port'}
 
         # Opens up the dictionary and extracts what is needed.
         # 'results' is what ELSA calls the list of attacks,
@@ -151,7 +164,7 @@ class AttackUpdateCommand(object):
         for r in attacks_json_dict['results']:
 
             # Timestamp is the first field extracted.
-            out_dict['timestamp'] = r['timestamp']
+            out_dict['timestamp'] = datetime.utcfromtimestamp(float(r['timestamp'])).strftime('%Y-%m-%d %H:%M:00')
             out_dict['id'] = r['id']
             if self.cyber_attack_service.get_model(id=out_dict['id']):
                 continue
@@ -160,20 +173,17 @@ class AttackUpdateCommand(object):
             # Format, as well as name changes have to be made for these field labels, as
             # ELSA uses a more complex representation than a single key, value pair.
             for f in r['_fields']:
-                if f['field'] in useful_fields:
+                if f['field'] == 'dstip':
+                    out_dict['target'] = self.target_service.get_model(target_ip=f['value'])
+                elif f['field'] in useful_fields:
                     out_dict[useful_fields[f['field']]] = f['value']
 
-            # If these keys don't exist, there's not enough data to process this attack's location.
-            # Discard and continue to next attack.
-            try:
-                # Query freegeoip.net's RESTful API for location data based on IP
-                fgip_dict = json.loads(requests.get('https://freegeoip.net/json/'+out_dict['attacker_ip']).text)
+            # Query freegeoip.net's RESTful API for location data based on IP
+            fgip_dict = json.loads(requests.get('https://freegeoip.net/json/'+out_dict['attacker_ip']).text)
 
-                # Copy longitude and latitude to the output dictionary.
-                out_dict['attacker_latitude'] = fgip_dict['latitude']
-                out_dict['attacker_longitude'] = fgip_dict['longitude']
-            except KeyError:
-                continue
+            # Copy longitude and latitude to the output dictionary.
+            out_dict['attacker_latitude'] = fgip_dict['latitude']
+            out_dict['attacker_longitude'] = fgip_dict['longitude']
 
             # Try to pull location data from freegeoip.net json
             if fgip_dict['city'] and fgip_dict['region_code'] and fgip_dict['country_code']:
@@ -196,7 +206,9 @@ class AttackUpdateCommand(object):
                     out_dict['attacker_location'] = "{}, {}".format(city, country_code)
             # Otherwise, discard and continue onto the next attack.
             else:
-                continue
+                out_dict['attacker_location'] = 'mars'
+                out_dict['attacker_longitude'] = '-70.257585'
+                out_dict['attacker_latitude'] = '43.643058'
 
             # Stub variable for the service, as it is implemented on the front end, but not yet the back end.
             out_dict['service'] = 'unknown'

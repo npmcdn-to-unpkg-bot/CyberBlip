@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned, 
     ValidationError
 from django.db import IntegrityError
 from django.db.models import Q
-from .models import CyberAttack
+from .models import CyberAttack, Target
 
 
 class Service(object):
@@ -194,3 +194,9 @@ class CyberAttackService(Service):
         Initialize a new CyberAttackService instance.
         """
         super().__init__(CyberAttack)
+
+
+class TargetService(Service):
+
+    def __init__(self):
+        super().__init__(Target)

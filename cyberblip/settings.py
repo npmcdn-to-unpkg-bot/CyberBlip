@@ -25,6 +25,12 @@ if not all(k in SECRETS for k in ['SECRET_KEY', 'ACCESS_TOKEN',
 SECRET_KEY = SECRETS['SECRET_KEY']
 ACCESS_TOKEN = SECRETS['ACCESS_TOKEN']
 API_KEY = SECRETS['GOOGLE_PLACES_API_KEY']
+
+HONEYPOTS = [{'target_ip':'192.168.56.103',
+              'target_location':'Portland, ME, US',
+              'target_latitude':'43.643058',
+              'target_longitude':'-70.257585'}]
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 

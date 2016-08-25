@@ -68,7 +68,7 @@ class AttackUpdateCommandTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.attack_update_command = AttackUpdateCommand(minutes=240)
+        self.attack_update_command = AttackUpdateCommand(minutes=1440)
         self.cyber_attack_service = CyberAttackService()
         #self.cyber_attack_service.remove_models()
 
@@ -79,7 +79,7 @@ class AttackUpdateCommandTestCase(TestCase):
         :return: None
         """
         self.attack_update_command.execute()
-        self.assertGreater(0, len(self.cyber_attack_service.list_models()))
+        self.assertGreater(len(self.cyber_attack_service.list_models()), 0)
 
 
 class GoogleMapsReverseGeoCodingAPICommandTestCase(TestCase):
