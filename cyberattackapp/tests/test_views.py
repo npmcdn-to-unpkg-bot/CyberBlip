@@ -1,9 +1,5 @@
-from datetime import datetime
-from django.utils import timezone
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
-from cyberattackapp.services import CyberAttackService
-from cyberattackapp.decorators import timeout
 
 
 class CyberAttackViewTestCase(APITestCase):
@@ -15,32 +11,7 @@ class CyberAttackViewTestCase(APITestCase):
         Initialize testing data.
         """
         self.client = APIClient()
-        self.cyber_attack_service = CyberAttackService()
         self.url = '/cyberattacks/'
-        self.cyber_attack_one = self.cyber_attack_service.create_model(
-            timestamp=datetime.now(tz=timezone.get_current_timezone()),
-            attacker_latitude=43,
-            attacker_longitude=-70,
-            attacker_location='Burger King',
-            target_latitude=45,
-            target_longitude=-72,
-            target_location='McDonalds',
-            attacker_ip='127.0.0.42',
-            service='SSH',
-            port=42
-        )
-        self.cyber_attack_two = self.cyber_attack_service.create_model(
-            timestamp=datetime.now(tz=timezone.get_current_timezone()),
-            attacker_latitude=43,
-            attacker_longitude=-70,
-            attacker_location='Burger King',
-            target_latitude=45,
-            target_longitude=-72,
-            target_location='McDonalds',
-            attacker_ip='127.0.0.43',
-            service='SSH',
-            port=43
-        )
         self.args_url = self.url + '?port=42&port=43&attacker_ip=127.0.0.43&target_ip='
 
     def test_get(self):

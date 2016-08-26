@@ -51,7 +51,7 @@ class Service(object):
         """
         model = self.get_model(**filter_args)
         try:
-            self.model.objects.filter(id=model.id).update(**update_args)
+            self.model.objects.filter(pk=model.pk).update(**update_args)
         except FieldDoesNotExist:
             raise AttributeError('Field does not exist')
 
@@ -140,7 +140,7 @@ class Service(object):
         """
         model = self.get_model(**kwargs)
         try:
-            self.model.objects.get(id=model.id).delete()
+            self.model.objects.get(pk=model.pk).delete()
         except (ObjectDoesNotExist, AttributeError):
             pass
 

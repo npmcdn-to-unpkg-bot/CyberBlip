@@ -1,9 +1,7 @@
-from datetime import datetime, timedelta
 from django.db.models.query import QuerySet
-from django.utils import timezone
 from django.test import TestCase
-from cyberattackapp.services import Service, CyberAttackService
-from cyberattackapp.models import CyberAttack
+from cyberattackapp.services import Service, CyberAttackService, TargetService
+from cyberattackapp.models import CyberAttack, Target
 
 
 class ServiceTestCase(TestCase):
@@ -14,26 +12,19 @@ class ServiceTestCase(TestCase):
         """
         Initialize testing data.
         """
-        self.service = Service(CyberAttack)
+        self.service = Service(Target)
         self.service.remove_models()
-        self.cyber_attack_generator = self._generate_attacks()
+        self.target_generator = self._generate_attacks()
         self.generator_count = 0
 
     def _generate_attacks(self):
         while True:
             self.generator_count += 1
             yield self.service.create_model(
-                id=str(self.generator_count),
-                timestamp=datetime.now(tz=timezone.get_current_timezone()),
-                attacker_latitude=43,
-                attacker_longitude=-70,
-                attacker_location='Burger King',
                 target_latitude=45,
                 target_longitude=-72,
                 target_location='McDonalds',
-                attacker_ip='127.0.0.{0}'.format(self.generator_count),
-                service='SSH',
-                port=self.generator_count
+                target_ip='127.0.0.{0}'.format(self.generator_count),
             )
 
     def test_init(self):
@@ -42,7 +33,7 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        self.assertEqual(CyberAttack, self.service.model)
+        self.assertEqual(Target, self.service.model)
 
     def test_create_model(self):
         """
@@ -50,21 +41,13 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack = next(self.cyber_attack_generator)
+        target = next(self.target_generator)
 
-        self.assertTrue(CyberAttack, type(cyber_attack))
-        self.assertAlmostEqual(datetime.now(tz=timezone.get_current_timezone()),
-                               cyber_attack.timestamp,
-                               delta=timedelta(1))
-        self.assertEqual(43, cyber_attack.attacker_latitude)
-        self.assertEqual(-70, cyber_attack.attacker_longitude)
-        self.assertEqual('Burger King', cyber_attack.attacker_location)
-        self.assertEqual(45, cyber_attack.target_latitude)
-        self.assertEqual(-72, cyber_attack.target_longitude)
-        self.assertEqual('McDonalds', cyber_attack.target_location)
-        self.assertEqual('127.0.0.{0}'.format(self.generator_count), cyber_attack.attacker_ip)
-        self.assertEqual('SSH', cyber_attack.service)
-        self.assertEqual(self.generator_count, cyber_attack.port)
+        self.assertTrue(Target, type(target))
+        self.assertEqual(45, target.target_latitude)
+        self.assertEqual(-72, target.target_longitude)
+        self.assertEqual('McDonalds', target.target_location)
+        self.assertEqual('127.0.0.{0}'.format(self.generator_count), target.target_ip)
 
         try:
             self.service.create_model()
@@ -79,24 +62,29 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.assertEqual(cyber_attack_two.id, self.service.get_model(port=cyber_attack_two.port,
-                                                                     attacker_ip=cyber_attack_two.attacker_ip).id)
-        self.assertEqual(cyber_attack_two.id, self.service.get_model(port=[cyber_attack_two.port,
-                                                                           cyber_attack_three.port],
-                                                                     service='SSH',
-                                                                     attacker_ip=cyber_attack_two.attacker_ip).id)
-        self.assertEqual(cyber_attack_three.id, self.service.get_model(port=[cyber_attack_three.port, 10000000000],
-                                                                       service=['TELNET', 'SSH']).id)
-        self.assertEqual(cyber_attack_one.id, self.service.get_model(port=cyber_attack_one.port,
-                                                                     service=['SSH', 'TELNET'],
-                                                                     attacker_ip=cyber_attack_one.attacker_ip).id)
+        self.assertEqual(target_two.target_ip, self.service.get_model(target_location='McDonalds',
+                                                               target_ip=target_two.target_ip).target_ip)
+        self.assertEqual(target_two.target_ip, self.service.get_model(target_location=[target_two.target_location,
+                                                                                target_three.target_location],
+                                                               target_latitude=[target_two.target_latitude,
+                                                                                target_three.target_latitude],
+                                                               target_ip=target_two.target_ip).target_ip)
+        self.assertEqual(target_three.target_ip, self.service.get_model(target_location=[target_three.target_location,
+                                                                                 'Wendys'],
+                                                                 target_longitude=[target_one.target_longitude,
+                                                                                   target_three.target_longitude],
+                                                                 target_ip=target_three.target_ip).target_ip)
+        self.assertEqual(target_one.target_ip, self.service.get_model(target_location=target_one.target_location,
+                                                               target_longitude=[target_two.target_longitude,
+                                                                                 target_one.target_longitude],
+                                                               target_ip=target_one.target_ip).target_ip)
 
-        self.assertRaises(AttributeError, lambda: self.service.get_model(port=[cyber_attack_one.port,
-                                                                               cyber_attack_two.port]))
+        self.assertRaises(AttributeError, lambda: self.service.get_model(target_ip=[target_one.target_ip,
+                                                                                    target_two.target_ip]))
         self.assertRaises(AttributeError, lambda: self.service.get_model(foo='bar'))
 
     def test_list_models(self):
@@ -105,30 +93,27 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.assertListEqual([cyber_attack_one, cyber_attack_two, cyber_attack_three],
-                             list(self.service.list_models(id=[cyber_attack_one.id,
-                                                               cyber_attack_two.id,
-                                                               cyber_attack_three.id])))
+        self.assertListEqual([target_one, target_two, target_three],
+                             list(self.service.list_models(target_ip=[target_one.target_ip,
+                                                               target_two.target_ip,
+                                                               target_three.target_ip])))
 
-        self.assertListEqual([cyber_attack_one],
-                             list(self.service.list_models(id=cyber_attack_one.id)))
+        self.assertListEqual([target_one],
+                             list(self.service.list_models(target_ip=target_one.target_ip)))
 
-        self.assertListEqual([cyber_attack_two],
-                             list(self.service.list_models(id=[cyber_attack_one.id,
-                                                               cyber_attack_two.id,
-                                                               cyber_attack_three.id],
-                                                           port=cyber_attack_two.port)))
+        self.assertListEqual([target_two],
+                             list(self.service.list_models(target_ip=[target_two.target_ip],
+                                                           target_location=target_two.target_location)))
 
-        self.assertListEqual([cyber_attack_one, cyber_attack_two],
-                             list(self.service.list_models(id=[cyber_attack_one.id,
-                                                               cyber_attack_two.id,
-                                                               cyber_attack_three.id],
-                                                           port=[cyber_attack_one.port,
-                                                                 cyber_attack_two.port])))
+        self.assertListEqual([target_one, target_two],
+                             list(self.service.list_models(target_ip=[target_one.target_ip,
+                                                               target_two.target_ip],
+                                                           target_location=[target_one.target_location,
+                                                                      target_two.target_location])))
 
         self.assertRaises(AttributeError, lambda: self.service.list_models(foo='bar'))
 
@@ -138,31 +123,31 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.service.update_model(filter_args={'id': cyber_attack_one.id},
-                                  update_args={'service': 'TELNET'})
-        self.service.update_model(filter_args={'id': cyber_attack_two.id,
-                                               'port': [cyber_attack_one.port, cyber_attack_two.port]},
-                                  update_args={'service': 'foo', 'attacker_location': 'bar'})
+        self.service.update_model(filter_args={'target_ip': target_one.target_ip},
+                                  update_args={'target_location': 'Little Caesers'})
+        self.service.update_model(filter_args={'target_ip': target_two.target_ip,
+                                               'target_location': [target_one.target_location, target_two.target_location]},
+                                  update_args={'target_latitude': 44, 'target_location': 'bar'})
 
-        self.assertEqual('SSH', cyber_attack_one.service)
-        self.assertEqual('SSH', cyber_attack_two.service)
-        self.assertEqual('Burger King', cyber_attack_two.attacker_location)
+        self.assertEqual('McDonalds', target_one.target_location)
+        self.assertEqual(45, target_two.target_latitude)
+        self.assertEqual('McDonalds', target_two.target_location)
 
-        cyber_attack_one = self.service.get_model(id=cyber_attack_one.id)
-        cyber_attack_two = self.service.get_model(id=cyber_attack_two.id)
+        target_one = self.service.get_model(target_ip=target_one.target_ip)
+        target_two = self.service.get_model(target_ip=target_two.target_ip)
 
-        self.assertEqual('TELNET', cyber_attack_one.service)
-        self.assertEqual('foo', cyber_attack_two.service)
-        self.assertEqual('bar', cyber_attack_two.attacker_location)
+        self.assertEqual('Little Caesers', target_one.target_location)
+        self.assertEqual(44, target_two.target_latitude)
+        self.assertEqual('bar', target_two.target_location)
 
-        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'id': [cyber_attack_one.id,
-                                                                                                cyber_attack_three.id]},
+        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'target_ip': [target_one.target_ip,
+                                                                                                target_three.target_ip]},
                                                                             update_args={}))
-        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'id': cyber_attack_three.id},
+        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'target_ip': target_three.target_ip},
                                                                             update_args={'foo': 'bar'}))
         self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={},
                                                                             update_args={}))
@@ -173,43 +158,41 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.service.update_models(filter_args={'id': [cyber_attack_one.id,
-                                                       cyber_attack_two.id,
-                                                       cyber_attack_three.id]},
-                                   update_args={'service': 'FOOBAR'})
+        self.service.update_models(filter_args={'target_ip': [target_one.target_ip,
+                                                       target_two.target_ip,
+                                                       target_three.target_ip]},
+                                   update_args={'target_location': 'FOOBAR'})
 
-        self.assertEqual('SSH', cyber_attack_one.service)
-        self.assertEqual('SSH', cyber_attack_two.service)
-        self.assertEqual('SSH', cyber_attack_three.service)
+        self.assertEqual('McDonalds', target_one.target_location)
+        self.assertEqual('McDonalds', target_two.target_location)
+        self.assertEqual('McDonalds', target_three.target_location)
 
-        cyber_attack_one = self.service.get_model(id=cyber_attack_one.id)
-        cyber_attack_two = self.service.get_model(id=cyber_attack_two.id)
-        cyber_attack_three = self.service.get_model(id=cyber_attack_three.id)
+        target_one = self.service.get_model(target_ip=target_one.target_ip)
+        target_two = self.service.get_model(target_ip=target_two.target_ip)
+        target_three = self.service.get_model(target_ip=target_three.target_ip)
 
-        self.assertEqual('FOOBAR', cyber_attack_one.service)
-        self.assertEqual('FOOBAR', cyber_attack_two.service)
-        self.assertEqual('FOOBAR', cyber_attack_three.service)
+        self.assertEqual('FOOBAR', target_one.target_location)
+        self.assertEqual('FOOBAR', target_two.target_location)
+        self.assertEqual('FOOBAR', target_three.target_location)
 
-        self.service.update_models(filter_args={'id': [cyber_attack_one.id,
-                                                       cyber_attack_two.id,
-                                                       cyber_attack_three.id],
-                                                'service': 'FOOBAR',
-                                                'port': [cyber_attack_two.port, cyber_attack_three.port]},
-                                   update_args={'service': 'SANDSTORM'})
+        self.service.update_models(filter_args={'target_ip': [target_two.target_ip,
+                                                       target_three.target_ip],
+                                                'target_location': 'FOOBAR'},
+                                   update_args={'target_location': 'SANDSTORM'})
 
-        cyber_attack_one = self.service.get_model(id=cyber_attack_one.id)
-        cyber_attack_two = self.service.get_model(id=cyber_attack_two.id)
-        cyber_attack_three = self.service.get_model(id=cyber_attack_three.id)
+        target_one = self.service.get_model(target_ip=target_one.target_ip)
+        target_two = self.service.get_model(target_ip=target_two.target_ip)
+        target_three = self.service.get_model(target_ip=target_three.target_ip)
 
-        self.assertEqual('FOOBAR', cyber_attack_one.service)
-        self.assertEqual('SANDSTORM', cyber_attack_two.service)
-        self.assertEqual('SANDSTORM', cyber_attack_three.service)
+        self.assertEqual('FOOBAR', target_one.target_location)
+        self.assertEqual('SANDSTORM', target_two.target_location)
+        self.assertEqual('SANDSTORM', target_three.target_location)
 
-        self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'id': cyber_attack_three.id},
+        self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'target_ip': target_three.target_ip},
                                                                              update_args={'foo': 'bar'}))
         self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'foo': 'bar'},
                                                                              update_args={}))
@@ -220,26 +203,28 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.assertEqual(cyber_attack_three, self.service.get_latest(filter_args={}, latest_by_field='timestamp'))
-        self.assertEqual(cyber_attack_two, self.service.get_latest(filter_args={'id': [cyber_attack_one.id,
-                                                                                       cyber_attack_two.id]},
-                                                                   latest_by_field='timestamp'))
-        self.assertEqual(cyber_attack_one, self.service.get_latest(filter_args={'id': cyber_attack_one.id},
-                                                                   latest_by_field='timestamp'))
-        self.assertEqual(cyber_attack_two, self.service.get_latest(filter_args={'id': [cyber_attack_one.id,
-                                                                                       cyber_attack_two.id,
-                                                                                       cyber_attack_three.id],
-                                                                                'port': [cyber_attack_one.port,
-                                                                                         cyber_attack_two.port]},
-                                                                   latest_by_field='timestamp'))
+        self.assertEqual(target_three, self.service.get_latest(filter_args={}, latest_by_field='target_ip'))
+        self.assertEqual(target_two, self.service.get_latest(filter_args={'target_ip': [target_one.target_ip,
+                                                                                 target_two.target_ip]},
+                                                             latest_by_field='target_ip'))
+        self.assertEqual(target_one, self.service.get_latest(filter_args={'target_ip': target_one.target_ip},
+                                                             latest_by_field='target_ip'))
+        self.assertEqual(target_three, self.service.get_latest(filter_args={'target_ip': [target_one.target_ip,
+                                                                                 target_two.target_ip,
+                                                                                 target_three.target_ip],
+                                                                          'target_location': [
+                                                                              target_one.target_location,
+                                                                              target_two.target_location
+                                                                          ]},
+                                                             latest_by_field='target_ip'))
 
-        self.assertIsNone(self.service.get_latest({'port': 50000000}, 'timestamp'))
+        self.assertIsNone(self.service.get_latest({'target_location': 'foo'}, 'target_ip'))
         self.assertRaises(AttributeError, lambda: self.service.get_latest(filter_args={'foo': 'bar'},
-                                                                          latest_by_field='timestamp'))
+                                                                          latest_by_field='target_ip'))
         self.assertRaises(AttributeError, lambda: self.service.get_latest(filter_args={},
                                                                           latest_by_field='foo'))
 
@@ -249,26 +234,23 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
 
-        self.assertEqual(3, self.service.count_models(id=[cyber_attack_one.id,
-                                                          cyber_attack_two.id,
-                                                          cyber_attack_three.id]))
+        self.assertEqual(3, self.service.count_models(target_ip=[target_one.target_ip,
+                                                          target_two.target_ip,
+                                                          target_three.target_ip]))
 
-        self.assertEqual(2, self.service.count_models(id=[cyber_attack_one.id,
-                                                          cyber_attack_two.id,
-                                                          cyber_attack_three.id],
-                                                      port=[cyber_attack_two.port,
-                                                            cyber_attack_three.port]))
+        self.assertEqual(2, self.service.count_models(target_ip=[target_one.target_ip,
+                                                          target_two.target_ip],
+                                                      target_location=[target_two.target_location,
+                                                                       target_three.target_location]))
 
-        self.assertEqual(1, self.service.count_models(id=[cyber_attack_one.id,
-                                                          cyber_attack_two.id,
-                                                          cyber_attack_three.id],
-                                                      port=cyber_attack_three.port))
+        self.assertEqual(1, self.service.count_models(target_ip=[target_one.target_ip],
+                                                      target_location=target_one.target_location))
 
-        self.assertEqual(1, self.service.count_models(id=cyber_attack_one.id))
+        self.assertEqual(1, self.service.count_models(target_ip=target_one.target_ip))
 
         self.assertRaises(AttributeError, lambda: self.service.count_models(foo='bar'))
 
@@ -278,22 +260,22 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
-        cyber_attack_four = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
+        target_four = next(self.target_generator)
 
-        self.service.remove_model(id=cyber_attack_one.id)
-        self.service.remove_model(id=[cyber_attack_two.id, cyber_attack_three.id], port=cyber_attack_two.port)
+        self.service.remove_model(target_ip=target_one.target_ip)
+        self.service.remove_model(target_ip=target_two.target_ip, target_location=target_two.target_location)
 
-        self.assertIsNone(self.service.get_model(id=cyber_attack_one.id))
-        self.assertIsNone(self.service.get_model(id=cyber_attack_two.id))
+        self.assertIsNone(self.service.get_model(target_ip=target_one.target_ip))
+        self.assertIsNone(self.service.get_model(target_ip=target_two.target_ip))
 
         self.assertRaises(AttributeError,
-                          lambda: self.service.remove_model(id=[cyber_attack_three.id, cyber_attack_four.id]))
+                          lambda: self.service.remove_model(target_ip=[target_three.target_ip, target_four.target_ip]))
 
         try:
-            self.service.remove_model(id=cyber_attack_one.id)
+            self.service.remove_model(target_ip=target_one.target_ip)
         except:
             raise AssertionError()
 
@@ -303,25 +285,25 @@ class ServiceTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        cyber_attack_one = next(self.cyber_attack_generator)
-        cyber_attack_two = next(self.cyber_attack_generator)
-        cyber_attack_three = next(self.cyber_attack_generator)
-        cyber_attack_four = next(self.cyber_attack_generator)
+        target_one = next(self.target_generator)
+        target_two = next(self.target_generator)
+        target_three = next(self.target_generator)
+        target_four = next(self.target_generator)
 
-        self.service.remove_models(id=[cyber_attack_one.id, cyber_attack_two.id])
-        self.service.remove_models(id=[cyber_attack_three.id, cyber_attack_four.id], port=cyber_attack_three.port)
-        self.service.remove_models(id=cyber_attack_four.id)
+        self.service.remove_models(target_ip=[target_one.target_ip, target_two.target_ip])
+        self.service.remove_models(target_ip=[target_three.target_ip, target_four.target_ip], target_location=target_three.target_location)
+        self.service.remove_models(target_ip=target_four.target_ip)
 
-        self.assertIsNone(self.service.get_model(id=cyber_attack_one.id))
-        self.assertIsNone(self.service.get_model(id=cyber_attack_two.id))
-        self.assertIsNone(self.service.get_model(id=cyber_attack_three.id))
-        self.assertIsNone(self.service.get_model(id=cyber_attack_four.id))
+        self.assertIsNone(self.service.get_model(target_ip=target_one.target_ip))
+        self.assertIsNone(self.service.get_model(target_ip=target_two.target_ip))
+        self.assertIsNone(self.service.get_model(target_ip=target_three.target_ip))
+        self.assertIsNone(self.service.get_model(target_ip=target_four.target_ip))
 
         try:
-            self.service.remove_models(id=[cyber_attack_one.id,
-                                           cyber_attack_two.id,
-                                           cyber_attack_three.id,
-                                           cyber_attack_four.id])
+            self.service.remove_models(target_ip=[target_one.target_ip,
+                                           target_two.target_ip,
+                                           target_three.target_ip,
+                                           target_four.target_ip])
         except:
             raise AssertionError()
 
@@ -353,3 +335,22 @@ class CyberAttackServiceTestCase(TestCase):
         :raise AssertionError:
         """
         self.assertEqual(CyberAttack, self.cyber_attack_service.model)
+
+
+class TargetServiceTestCase(TestCase):
+    """
+    Unit testing class for the TargetService class.
+    """
+    def setUp(self):
+        """
+        Initialize testing data.
+        """
+        self.target_service = TargetService()
+
+    def test_init(self):
+        """
+        Test the init method.
+
+        :raise AssertionError:
+        """
+        self.assertEqual(Target, self.target_service.model)
