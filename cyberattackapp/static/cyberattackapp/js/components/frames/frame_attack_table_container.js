@@ -88,8 +88,8 @@ FrameAttackTableContainer.prototype.add_table_row = function (data) {
 
     attack_row.push(this.components['table_timestamp'].add_body_row([data['timestamp']]));
     attack_row.push(this.components['table_attacker'].add_body_row([data['organization'], String(data['attacker_latitude']) + ', ' + String(data['attacker_longitude']), data['attacker_ip']]));
-    attack_row.push(this.components['table_target'].add_body_row([String(data['target_latitude']) + ', ' + String(data['target_longitude'])]));
-    attack_row.push(this.components['table_type'].add_body_row([data['service'], data['port']]));
+    attack_row.push(this.components['table_target'].add_body_row([String(data['target']['latitude']) + ', ' + String(data['target']['longitude'])]));
+    attack_row.push(this.components['table_type'].add_body_row([data['service'], data['target_port']]));
 
     this.visible_rows.push(attack_row);
 };
