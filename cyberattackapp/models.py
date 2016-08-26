@@ -33,11 +33,9 @@ class CyberAttack(models.Model):
         - attacker_latitude:  models.DecimalField(max_digits=15, decimal_places=6)
         - attacker_longitude: models.DecimalField(max_digits=15, decimal_places=6)
         - attacker_location: models.CharField(max_length=100)
-        - target_latitude: models.DecimalField(max_digits=15, decimal_places=6)
-        - target_longitude: models.DecimalField(max_digits=15, decimal_places=6)
-        - target_location: models.CharField(max_length=100)
         - service: models.CharField(max_length=100)
-        - port: models.DecimalField(max_digits=15, decimal_places=0)
+        - target_port: models.DecimalField(max_digits=15, decimal_places=0)
+        - target: models.ForeignKey(Target)
     """
     id = models.CharField(max_length=100, primary_key=True)
     timestamp = models.DateTimeField()
