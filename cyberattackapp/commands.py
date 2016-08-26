@@ -121,7 +121,7 @@ class PopulateTargetsCommand(object):
 
     def execute(self):
         for h in settings.HONEYPOTS:
-            if not self.target_service.get_model(target_ip=h['target_ip']):
+            if not self.target_service.get_model(ip=h['ip']):
                 self.target_service.create_model(**h)
 
 
@@ -176,7 +176,7 @@ class AttackUpdateCommand(object):
             # ELSA uses a more complex representation than a single key, value pair.
             for f in r['_fields']:
                 if f['field'] == 'dstip':
-                    out_dict['target'] = self.target_service.get_model(target_ip=f['value'])
+                    out_dict['target'] = self.target_service.get_model(ip=f['value'])
                 elif f['field'] in useful_fields:
                     out_dict[useful_fields[f['field']]] = f['value']
 
