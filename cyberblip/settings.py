@@ -26,10 +26,15 @@ SECRET_KEY = SECRETS['SECRET_KEY']
 ACCESS_TOKEN = SECRETS['ACCESS_TOKEN']
 API_KEY = SECRETS['GOOGLE_PLACES_API_KEY']
 
+# A variable that stores the locations of known honeypots in the network.
+# This is a list of dictionaries that is used in the PopulateTargetsCommand.
 HONEYPOTS = [{'target_ip':'192.168.56.103',
               'target_location':'Portland, ME, US',
               'target_latitude':'43.643058',
               'target_longitude':'-70.257585'}]
+
+# The IP of the main Security Onion server.
+SO_DB_SERVER_IP = '192.168.56.101'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/

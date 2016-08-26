@@ -1,7 +1,8 @@
 from django.test import TestCase
-from cyberattackapp.commands import GetAttacksCommand, AttackPullCommand, AttackUpdateCommand, GoogleMapsReverseGeoCodingAPICommand
+from cyberattackapp.commands import GetAttacksCommand, PopulateTargetsCommand, AttackPullCommand, AttackUpdateCommand, \
+    GoogleMapsReverseGeoCodingAPICommand
 from cyberattackapp.decorators import timeout
-from cyberattackapp.services import CyberAttackService
+from cyberattackapp.services import CyberAttackService, TargetService
 
 
 class GetAttackCommandTestCase(TestCase):
@@ -57,6 +58,23 @@ class AttackPullCommandTestCase(TestCase):
 
         self.assertTrue('percentage_complete' in res)
         self.assertEqual(res['percentage_complete'], 100)
+
+
+class PopulateTargetsCommandTestCase(TestCase):
+    """
+    Unit testing class for the PopulateTargetsCommand class.
+    """
+
+    def setUp(self):
+        self.populate_targets_command = PopulateTargetsCommand()
+        self.target_service = TargetService()
+
+    def test_execute(self):
+        """
+        Testing execute method.
+        """
+        self.populate_targets_command.execute()
+        self.assertGreater(len(self.target_service.list_models()), 0)
 
 
 class AttackUpdateCommandTestCase(TestCase):
