@@ -21,10 +21,10 @@ class ServiceTestCase(TestCase):
         while True:
             self.generator_count += 1
             yield self.service.create_model(
-                target_latitude=45,
-                target_longitude=-72,
-                target_location='McDonalds',
-                target_ip='127.0.0.{0}'.format(self.generator_count),
+                latitude=45,
+                longitude=-72,
+                location='McDonalds',
+                ip='127.0.0.{0}'.format(self.generator_count),
             )
 
     def test_init(self):
@@ -44,10 +44,10 @@ class ServiceTestCase(TestCase):
         target = next(self.target_generator)
 
         self.assertTrue(Target, type(target))
-        self.assertEqual(45, target.target_latitude)
-        self.assertEqual(-72, target.target_longitude)
-        self.assertEqual('McDonalds', target.target_location)
-        self.assertEqual('127.0.0.{0}'.format(self.generator_count), target.target_ip)
+        self.assertEqual(45, target.latitude)
+        self.assertEqual(-72, target.longitude)
+        self.assertEqual('McDonalds', target.location)
+        self.assertEqual('127.0.0.{0}'.format(self.generator_count), target.ip)
 
         try:
             self.service.create_model()
@@ -66,25 +66,25 @@ class ServiceTestCase(TestCase):
         target_two = next(self.target_generator)
         target_three = next(self.target_generator)
 
-        self.assertEqual(target_two.target_ip, self.service.get_model(target_location='McDonalds',
-                                                               target_ip=target_two.target_ip).target_ip)
-        self.assertEqual(target_two.target_ip, self.service.get_model(target_location=[target_two.target_location,
-                                                                                target_three.target_location],
-                                                               target_latitude=[target_two.target_latitude,
-                                                                                target_three.target_latitude],
-                                                               target_ip=target_two.target_ip).target_ip)
-        self.assertEqual(target_three.target_ip, self.service.get_model(target_location=[target_three.target_location,
+        self.assertEqual(target_two.ip, self.service.get_model(location='McDonalds',
+                                                               ip=target_two.ip).ip)
+        self.assertEqual(target_two.ip, self.service.get_model(location=[target_two.location,
+                                                                                target_three.location],
+                                                               latitude=[target_two.latitude,
+                                                                                target_three.latitude],
+                                                               ip=target_two.ip).ip)
+        self.assertEqual(target_three.ip, self.service.get_model(location=[target_three.location,
                                                                                  'Wendys'],
-                                                                 target_longitude=[target_one.target_longitude,
-                                                                                   target_three.target_longitude],
-                                                                 target_ip=target_three.target_ip).target_ip)
-        self.assertEqual(target_one.target_ip, self.service.get_model(target_location=target_one.target_location,
-                                                               target_longitude=[target_two.target_longitude,
-                                                                                 target_one.target_longitude],
-                                                               target_ip=target_one.target_ip).target_ip)
+                                                                 longitude=[target_one.longitude,
+                                                                                   target_three.longitude],
+                                                                 ip=target_three.ip).ip)
+        self.assertEqual(target_one.ip, self.service.get_model(location=target_one.location,
+                                                               longitude=[target_two.longitude,
+                                                                                 target_one.longitude],
+                                                               ip=target_one.ip).ip)
 
-        self.assertRaises(AttributeError, lambda: self.service.get_model(target_ip=[target_one.target_ip,
-                                                                                    target_two.target_ip]))
+        self.assertRaises(AttributeError, lambda: self.service.get_model(ip=[target_one.ip,
+                                                                                    target_two.ip]))
         self.assertRaises(AttributeError, lambda: self.service.get_model(foo='bar'))
 
     def test_list_models(self):
@@ -98,22 +98,22 @@ class ServiceTestCase(TestCase):
         target_three = next(self.target_generator)
 
         self.assertListEqual([target_one, target_two, target_three],
-                             list(self.service.list_models(target_ip=[target_one.target_ip,
-                                                               target_two.target_ip,
-                                                               target_three.target_ip])))
+                             list(self.service.list_models(ip=[target_one.ip,
+                                                               target_two.ip,
+                                                               target_three.ip])))
 
         self.assertListEqual([target_one],
-                             list(self.service.list_models(target_ip=target_one.target_ip)))
+                             list(self.service.list_models(ip=target_one.ip)))
 
         self.assertListEqual([target_two],
-                             list(self.service.list_models(target_ip=[target_two.target_ip],
-                                                           target_location=target_two.target_location)))
+                             list(self.service.list_models(ip=[target_two.ip],
+                                                           location=target_two.location)))
 
         self.assertListEqual([target_one, target_two],
-                             list(self.service.list_models(target_ip=[target_one.target_ip,
-                                                               target_two.target_ip],
-                                                           target_location=[target_one.target_location,
-                                                                      target_two.target_location])))
+                             list(self.service.list_models(ip=[target_one.ip,
+                                                               target_two.ip],
+                                                           location=[target_one.location,
+                                                                      target_two.location])))
 
         self.assertRaises(AttributeError, lambda: self.service.list_models(foo='bar'))
 
@@ -127,27 +127,27 @@ class ServiceTestCase(TestCase):
         target_two = next(self.target_generator)
         target_three = next(self.target_generator)
 
-        self.service.update_model(filter_args={'target_ip': target_one.target_ip},
-                                  update_args={'target_location': 'Little Caesers'})
-        self.service.update_model(filter_args={'target_ip': target_two.target_ip,
-                                               'target_location': [target_one.target_location, target_two.target_location]},
-                                  update_args={'target_latitude': 44, 'target_location': 'bar'})
+        self.service.update_model(filter_args={'ip': target_one.ip},
+                                  update_args={'location': 'Little Caesers'})
+        self.service.update_model(filter_args={'ip': target_two.ip,
+                                               'location': [target_one.location, target_two.location]},
+                                  update_args={'latitude': 44, 'location': 'bar'})
 
-        self.assertEqual('McDonalds', target_one.target_location)
-        self.assertEqual(45, target_two.target_latitude)
-        self.assertEqual('McDonalds', target_two.target_location)
+        self.assertEqual('McDonalds', target_one.location)
+        self.assertEqual(45, target_two.latitude)
+        self.assertEqual('McDonalds', target_two.location)
 
-        target_one = self.service.get_model(target_ip=target_one.target_ip)
-        target_two = self.service.get_model(target_ip=target_two.target_ip)
+        target_one = self.service.get_model(ip=target_one.ip)
+        target_two = self.service.get_model(ip=target_two.ip)
 
-        self.assertEqual('Little Caesers', target_one.target_location)
-        self.assertEqual(44, target_two.target_latitude)
-        self.assertEqual('bar', target_two.target_location)
+        self.assertEqual('Little Caesers', target_one.location)
+        self.assertEqual(44, target_two.latitude)
+        self.assertEqual('bar', target_two.location)
 
-        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'target_ip': [target_one.target_ip,
-                                                                                                target_three.target_ip]},
+        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'ip': [target_one.ip,
+                                                                                                target_three.ip]},
                                                                             update_args={}))
-        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'target_ip': target_three.target_ip},
+        self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={'ip': target_three.ip},
                                                                             update_args={'foo': 'bar'}))
         self.assertRaises(AttributeError, lambda: self.service.update_model(filter_args={},
                                                                             update_args={}))
@@ -162,37 +162,37 @@ class ServiceTestCase(TestCase):
         target_two = next(self.target_generator)
         target_three = next(self.target_generator)
 
-        self.service.update_models(filter_args={'target_ip': [target_one.target_ip,
-                                                       target_two.target_ip,
-                                                       target_three.target_ip]},
-                                   update_args={'target_location': 'FOOBAR'})
+        self.service.update_models(filter_args={'ip': [target_one.ip,
+                                                       target_two.ip,
+                                                       target_three.ip]},
+                                   update_args={'location': 'FOOBAR'})
 
-        self.assertEqual('McDonalds', target_one.target_location)
-        self.assertEqual('McDonalds', target_two.target_location)
-        self.assertEqual('McDonalds', target_three.target_location)
+        self.assertEqual('McDonalds', target_one.location)
+        self.assertEqual('McDonalds', target_two.location)
+        self.assertEqual('McDonalds', target_three.location)
 
-        target_one = self.service.get_model(target_ip=target_one.target_ip)
-        target_two = self.service.get_model(target_ip=target_two.target_ip)
-        target_three = self.service.get_model(target_ip=target_three.target_ip)
+        target_one = self.service.get_model(ip=target_one.ip)
+        target_two = self.service.get_model(ip=target_two.ip)
+        target_three = self.service.get_model(ip=target_three.ip)
 
-        self.assertEqual('FOOBAR', target_one.target_location)
-        self.assertEqual('FOOBAR', target_two.target_location)
-        self.assertEqual('FOOBAR', target_three.target_location)
+        self.assertEqual('FOOBAR', target_one.location)
+        self.assertEqual('FOOBAR', target_two.location)
+        self.assertEqual('FOOBAR', target_three.location)
 
-        self.service.update_models(filter_args={'target_ip': [target_two.target_ip,
-                                                       target_three.target_ip],
-                                                'target_location': 'FOOBAR'},
-                                   update_args={'target_location': 'SANDSTORM'})
+        self.service.update_models(filter_args={'ip': [target_two.ip,
+                                                       target_three.ip],
+                                                'location': 'FOOBAR'},
+                                   update_args={'location': 'SANDSTORM'})
 
-        target_one = self.service.get_model(target_ip=target_one.target_ip)
-        target_two = self.service.get_model(target_ip=target_two.target_ip)
-        target_three = self.service.get_model(target_ip=target_three.target_ip)
+        target_one = self.service.get_model(ip=target_one.ip)
+        target_two = self.service.get_model(ip=target_two.ip)
+        target_three = self.service.get_model(ip=target_three.ip)
 
-        self.assertEqual('FOOBAR', target_one.target_location)
-        self.assertEqual('SANDSTORM', target_two.target_location)
-        self.assertEqual('SANDSTORM', target_three.target_location)
+        self.assertEqual('FOOBAR', target_one.location)
+        self.assertEqual('SANDSTORM', target_two.location)
+        self.assertEqual('SANDSTORM', target_three.location)
 
-        self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'target_ip': target_three.target_ip},
+        self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'ip': target_three.ip},
                                                                              update_args={'foo': 'bar'}))
         self.assertRaises(AttributeError, lambda: self.service.update_models(filter_args={'foo': 'bar'},
                                                                              update_args={}))
@@ -207,24 +207,24 @@ class ServiceTestCase(TestCase):
         target_two = next(self.target_generator)
         target_three = next(self.target_generator)
 
-        self.assertEqual(target_three, self.service.get_latest(filter_args={}, latest_by_field='target_ip'))
-        self.assertEqual(target_two, self.service.get_latest(filter_args={'target_ip': [target_one.target_ip,
-                                                                                 target_two.target_ip]},
-                                                             latest_by_field='target_ip'))
-        self.assertEqual(target_one, self.service.get_latest(filter_args={'target_ip': target_one.target_ip},
-                                                             latest_by_field='target_ip'))
-        self.assertEqual(target_three, self.service.get_latest(filter_args={'target_ip': [target_one.target_ip,
-                                                                                 target_two.target_ip,
-                                                                                 target_three.target_ip],
-                                                                          'target_location': [
-                                                                              target_one.target_location,
-                                                                              target_two.target_location
+        self.assertEqual(target_three, self.service.get_latest(filter_args={}, latest_by_field='ip'))
+        self.assertEqual(target_two, self.service.get_latest(filter_args={'ip': [target_one.ip,
+                                                                                 target_two.ip]},
+                                                             latest_by_field='ip'))
+        self.assertEqual(target_one, self.service.get_latest(filter_args={'ip': target_one.ip},
+                                                             latest_by_field='ip'))
+        self.assertEqual(target_three, self.service.get_latest(filter_args={'ip': [target_one.ip,
+                                                                                 target_two.ip,
+                                                                                 target_three.ip],
+                                                                          'location': [
+                                                                              target_one.location,
+                                                                              target_two.location
                                                                           ]},
-                                                             latest_by_field='target_ip'))
+                                                             latest_by_field='ip'))
 
-        self.assertIsNone(self.service.get_latest({'target_location': 'foo'}, 'target_ip'))
+        self.assertIsNone(self.service.get_latest({'location': 'foo'}, 'ip'))
         self.assertRaises(AttributeError, lambda: self.service.get_latest(filter_args={'foo': 'bar'},
-                                                                          latest_by_field='target_ip'))
+                                                                          latest_by_field='ip'))
         self.assertRaises(AttributeError, lambda: self.service.get_latest(filter_args={},
                                                                           latest_by_field='foo'))
 
@@ -238,19 +238,19 @@ class ServiceTestCase(TestCase):
         target_two = next(self.target_generator)
         target_three = next(self.target_generator)
 
-        self.assertEqual(3, self.service.count_models(target_ip=[target_one.target_ip,
-                                                          target_two.target_ip,
-                                                          target_three.target_ip]))
+        self.assertEqual(3, self.service.count_models(ip=[target_one.ip,
+                                                          target_two.ip,
+                                                          target_three.ip]))
 
-        self.assertEqual(2, self.service.count_models(target_ip=[target_one.target_ip,
-                                                          target_two.target_ip],
-                                                      target_location=[target_two.target_location,
-                                                                       target_three.target_location]))
+        self.assertEqual(2, self.service.count_models(ip=[target_one.ip,
+                                                          target_two.ip],
+                                                      location=[target_two.location,
+                                                                       target_three.location]))
 
-        self.assertEqual(1, self.service.count_models(target_ip=[target_one.target_ip],
-                                                      target_location=target_one.target_location))
+        self.assertEqual(1, self.service.count_models(ip=[target_one.ip],
+                                                      location=target_one.location))
 
-        self.assertEqual(1, self.service.count_models(target_ip=target_one.target_ip))
+        self.assertEqual(1, self.service.count_models(ip=target_one.ip))
 
         self.assertRaises(AttributeError, lambda: self.service.count_models(foo='bar'))
 
@@ -265,17 +265,17 @@ class ServiceTestCase(TestCase):
         target_three = next(self.target_generator)
         target_four = next(self.target_generator)
 
-        self.service.remove_model(target_ip=target_one.target_ip)
-        self.service.remove_model(target_ip=target_two.target_ip, target_location=target_two.target_location)
+        self.service.remove_model(ip=target_one.ip)
+        self.service.remove_model(ip=target_two.ip, location=target_two.location)
 
-        self.assertIsNone(self.service.get_model(target_ip=target_one.target_ip))
-        self.assertIsNone(self.service.get_model(target_ip=target_two.target_ip))
+        self.assertIsNone(self.service.get_model(ip=target_one.ip))
+        self.assertIsNone(self.service.get_model(ip=target_two.ip))
 
         self.assertRaises(AttributeError,
-                          lambda: self.service.remove_model(target_ip=[target_three.target_ip, target_four.target_ip]))
+                          lambda: self.service.remove_model(ip=[target_three.ip, target_four.ip]))
 
         try:
-            self.service.remove_model(target_ip=target_one.target_ip)
+            self.service.remove_model(ip=target_one.ip)
         except:
             raise AssertionError()
 
@@ -290,20 +290,20 @@ class ServiceTestCase(TestCase):
         target_three = next(self.target_generator)
         target_four = next(self.target_generator)
 
-        self.service.remove_models(target_ip=[target_one.target_ip, target_two.target_ip])
-        self.service.remove_models(target_ip=[target_three.target_ip, target_four.target_ip], target_location=target_three.target_location)
-        self.service.remove_models(target_ip=target_four.target_ip)
+        self.service.remove_models(ip=[target_one.ip, target_two.ip])
+        self.service.remove_models(ip=[target_three.ip, target_four.ip], location=target_three.location)
+        self.service.remove_models(ip=target_four.ip)
 
-        self.assertIsNone(self.service.get_model(target_ip=target_one.target_ip))
-        self.assertIsNone(self.service.get_model(target_ip=target_two.target_ip))
-        self.assertIsNone(self.service.get_model(target_ip=target_three.target_ip))
-        self.assertIsNone(self.service.get_model(target_ip=target_four.target_ip))
+        self.assertIsNone(self.service.get_model(ip=target_one.ip))
+        self.assertIsNone(self.service.get_model(ip=target_two.ip))
+        self.assertIsNone(self.service.get_model(ip=target_three.ip))
+        self.assertIsNone(self.service.get_model(ip=target_four.ip))
 
         try:
-            self.service.remove_models(target_ip=[target_one.target_ip,
-                                           target_two.target_ip,
-                                           target_three.target_ip,
-                                           target_four.target_ip])
+            self.service.remove_models(ip=[target_one.ip,
+                                           target_two.ip,
+                                           target_three.ip,
+                                           target_four.ip])
         except:
             raise AssertionError()
 

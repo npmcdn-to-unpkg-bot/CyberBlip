@@ -2,10 +2,10 @@ from django.db import models
 
 
 class Target(models.Model):
-    target_ip = models.CharField(max_length=100, primary_key=True)
-    target_latitude = models.DecimalField(max_digits=15, decimal_places=6)
-    target_longitude = models.DecimalField(max_digits=15, decimal_places=6)
-    target_location = models.CharField(max_length=100)
+    ip = models.CharField(max_length=100, primary_key=True)
+    latitude = models.DecimalField(max_digits=15, decimal_places=6)
+    longitude = models.DecimalField(max_digits=15, decimal_places=6)
+    location = models.CharField(max_length=100)
 
     @classmethod
     def create(cls, **kwargs):
@@ -19,7 +19,7 @@ class Target(models.Model):
         return cls(**kwargs)
 
     class Meta:
-        ordering = ['target_ip']
+        ordering = ['ip']
 
 
 class CyberAttack(models.Model):

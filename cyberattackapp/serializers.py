@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CyberAttack
+from .models import CyberAttack, Target
 
 
 class CyberAttackSerializer(serializers.ModelSerializer):
@@ -8,4 +8,13 @@ class CyberAttackSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = CyberAttack
+        fields = '__all__'
+
+
+class TargetSerializer(serializers.ModelSerializer):
+    """
+    Serializing class for the Target model.
+    """
+    class Meta:
+        model = Target
         fields = '__all__'
