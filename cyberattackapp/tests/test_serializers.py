@@ -65,7 +65,10 @@ class CyberAttackSerializerTestCase(TestCase):
         )
         serialized_cyber_attack = CyberAttackSerializer(cyberattack)
 
-        fields = sorted(['id', 'timestamp', 'attacker_ip', 'attacker_latitude', 'attacker_longitude',
-                        'attacker_location', 'service', 'attacker_port', 'target_port', 'target'])
+        cyber_attack_fields = sorted(['id', 'timestamp', 'attacker_ip', 'attacker_latitude', 'attacker_longitude',
+                                      'attacker_location', 'service', 'attacker_port', 'target_port', 'target'])
 
-        self.assertListEqual(fields, sorted(list(dict(serialized_cyber_attack.fields).keys())))
+        target_fields = sorted(['ip', 'location', 'latitude', 'longitude'])
+
+        self.assertListEqual(cyber_attack_fields, sorted(list(dict(serialized_cyber_attack.fields).keys())))
+        self.assertListEqual(target_fields, sorted(list(dict(serialized_cyber_attack.fields['target'].fields).keys())))

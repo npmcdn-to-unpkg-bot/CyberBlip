@@ -1,8 +1,8 @@
 from django.test import TestCase
 from cyberattackapp.commands import GetAttacksCommand, PopulateTargetsCommand, AttackPullCommand, AttackUpdateCommand, \
     GoogleMapsReverseGeoCodingAPICommand
-from cyberattackapp.decorators import timeout
 from cyberattackapp.services import CyberAttackService, TargetService
+from cyberattackapp.models import CyberAttack
 
 
 class GetAttackCommandTestCase(TestCase):
@@ -21,12 +21,10 @@ class GetAttackCommandTestCase(TestCase):
 
         :raise AssertionError: If the test fails.
         """
-        keys = sorted(['timestamp', 'attacker_latitude', 'attacker_longitude', 'target_latitude', 'target_longitude',
-                       'attacker_ip', 'service', 'port'])
-
         recent_attacks = self.get_attacks_command.execute()
+        self.assertGreater(len(recent_attacks), 0)
         for attack in recent_attacks:
-            self.assertListEqual(keys, sorted(list(attack.keys())))
+            self.assertEqual(CyberAttack, type(attack))
 
 
 class AttackPullCommandTestCase(TestCase):
@@ -55,7 +53,6 @@ class AttackPullCommandTestCase(TestCase):
         # If the query to ELSA completes correctly, the dictionary should
         # come back with a top level key, value pair of
         # "percentage_complete: 100"
-
         self.assertTrue('percentage_complete' in res)
         self.assertEqual(res['percentage_complete'], 100)
 
@@ -73,6 +70,7 @@ class PopulateTargetsCommandTestCase(TestCase):
         """
         Testing execute method.
         """
+        self.target_service.remove_models()
         self.populate_targets_command.execute()
         self.assertGreater(len(self.target_service.list_models()), 0)
 
@@ -88,7 +86,6 @@ class AttackUpdateCommandTestCase(TestCase):
         """
         self.attack_update_command = AttackUpdateCommand(minutes=1440)
         self.cyber_attack_service = CyberAttackService()
-        #self.cyber_attack_service.remove_models()
 
     def test_execute(self):
         """
@@ -96,6 +93,7 @@ class AttackUpdateCommandTestCase(TestCase):
 
         :return: None
         """
+        self.cyber_attack_service.remove_models()
         self.attack_update_command.execute()
         self.assertGreater(len(self.cyber_attack_service.list_models()), 0)
 

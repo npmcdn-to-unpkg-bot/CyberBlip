@@ -18,7 +18,7 @@ class GetAttacksCommand(object):
         :type filter_args: dict
         """
         self.cyber_attack_service = CyberAttackService()
-        self.update_attacks_command = AttackUpdateCommand()
+        self.update_attacks_command = AttackUpdateCommand(1440)
         self.filter = filter_args.copy()
         self.filter.pop('format', None)
 

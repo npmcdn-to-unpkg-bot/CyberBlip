@@ -18,6 +18,20 @@ class Target(models.Model):
         """
         return cls(**kwargs)
 
+    def as_dict(self):
+        """
+        Get a dictionary representation of this model.
+
+        :return: A dictionary representation of this model.
+        :rtype: dict
+        """
+        return {
+            'ip': self.ip,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'location': self.location
+        }
+
     class Meta:
         ordering = ['ip']
 
@@ -58,6 +72,26 @@ class CyberAttack(models.Model):
         :rtype: CyberAttack
         """
         return cls(**kwargs)
+
+    def as_dict(self):
+        """
+        Get a dictionary representation of this model.
+
+        :return: A dictionary representation of this model.
+        :rtype: dict
+        """
+        return {
+            'id': self.id,
+            'timestamp': self.timestamp,
+            'attacker_ip': self.attacker_ip,
+            'attacker_latitude': self.attacker_latitude,
+            'attacker_longitude': self.attacker_longitude,
+            'attacker_location': self.attacker_location,
+            'service': self.service,
+            'attacker_port': self.attacker_port,
+            'target_port': self.target_port,
+            'target': self.target.as_dict()
+        }
 
     class Meta:
         ordering = ['timestamp']

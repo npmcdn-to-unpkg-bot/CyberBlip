@@ -12,7 +12,7 @@ class CyberAttackViewTestCase(APITestCase):
         """
         self.client = APIClient()
         self.url = '/cyberattacks/'
-        self.args_url = self.url + '?port=42&port=43&attacker_ip=127.0.0.43&target_ip='
+        self.args_url = self.url + '?attacker_port=42&attacker_port=43&attacker_ip=127.0.0.43&target__ip=127.0.0.50'
 
     def test_get(self):
         """
