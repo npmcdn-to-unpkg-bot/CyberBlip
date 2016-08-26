@@ -86,11 +86,13 @@ class GenerateAttacksCommand(object):
 class AttackPullCommand(object):
     """
     A Command class for gathering attack data, being served by remote machines.
+
+    Gathers
     """
     def __init__(self, minutes=2):
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.client.connect('192.168.56.101', 22, username='reports', password='v1d4l14')
+        self.client.connect(settings.SO_DB_SERVER_IP, 22, username='reports', password='v1d4l14')
         self.minutes = minutes
 
     def execute(self):
