@@ -1,8 +1,18 @@
 function Map(selector) {
+    /*
+     * A Base Map widget.
+     *
+     * Use this widget for DOM elements that act as Maps.
+     *
+     * Concrete Map widgets should implement an init method that uses an API (Google maps, Leaflet, etc.)
+     * to set the map attribute of this Component as well as any other map initialization requirements.
+     *
+     * @param selector: The DOM element selector this widget represents.
+     */
     Component.call(this, selector);
     this.map = null;
 }
-Map.prototype = Object.create(Component.prototype);
+Map.prototype = Object.create(Component.prototype); /* A Map is a Component */
 Map.prototype.disable = function () {
     /* do nothing */
 };
@@ -10,12 +20,25 @@ Map.prototype.enable = function () {
     /* do nothing */
 };
 Map.prototype.remove_layer = function(layer) {
+    /*
+     * Remove a layer from the map.
+     *
+     * Assumes the API that was used to create this objects map attribute has a 'removeLayer' method.
+     */
     if(this.map){
         this.map.removeLayer(layer);
     }
 };
 Map.prototype.get_angle = function (lat1, lon1, lat2, lon2) {
-
+    /*
+     * Get the angle between two latitude/longitude points.
+     *
+     * @param lat1: The latitude of the first point as a float.
+     * @param lon1: The longitude of the first point as a float.
+     * @param lat2: The latitude of the second point as a float.
+     * @param lon2: The longitude of the second point as a float.
+     * @return: The Angle between the two points in degrees.
+     */
     var dLon = (lon2 - lon1);
 
     var y = Math.sin(dLon) * Math.cos(lat2);
