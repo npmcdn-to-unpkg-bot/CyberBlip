@@ -13,7 +13,7 @@ FrameRoot.prototype.init = function () {
     (function(instance){
         setInterval(function(){
             instance.handle('update_attacks')
-        }, 300000);
+        }, 60000);
     })(this);
 };
 FrameRoot.prototype.handle = function (event, data) {
@@ -26,7 +26,7 @@ FrameRoot.prototype.handle = function (event, data) {
             $.get('cyberattacks', instance.filter, function (attack_data) {
                 var start_time = new Date();
                 start_time = new Date(start_time.getTime() + start_time.getTimezoneOffset() * 60000);
-                start_time.setMinutes(start_time.getMinutes() - 5);
+                start_time.setMinutes(start_time.getMinutes() - 1);
                 attack_data = JSON.parse(attack_data);
                 for (var i = 0; i < attack_data.length; i++){
                     var attack = attack_data[i];
