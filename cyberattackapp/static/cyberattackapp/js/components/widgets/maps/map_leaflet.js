@@ -1,4 +1,13 @@
 function MapLeaflet(selector, center_lat, center_lon, zoom, fixed){
+    /*
+     * A Map widget using the Leaflet API.
+     *
+     * @param selector: The DOM element selector representing this Map widget.
+     * @param center_lat: The default center latitude to display this map at. (float)
+     * @param center_lon: The default center longitude to display this map at. (float)
+     * @param zoom: The default zoom level for this map. (int)
+     * @param fixed: A flag for if this map should be fixed in position or not. (bool)
+     */
     Map.call(this, selector);
     this.center_lat = center_lat;
     this.center_lon = center_lon;
@@ -7,9 +16,15 @@ function MapLeaflet(selector, center_lat, center_lon, zoom, fixed){
     this.next_stream_bit_id = 0;
     this.locked = fixed
 }
-MapLeaflet.prototype = Object.create(Map.prototype);
+MapLeaflet.prototype = Object.create(Map.prototype); /* This is a Map widget */
 MapLeaflet.prototype.__super__map__leaflet__ = Map;
 MapLeaflet.prototype.init = function () {
+    /*
+     * Initialize this MapLeaflet instance.
+     *
+     * Creates a LeafLet Map object to display within this objects selector.
+     * Sets up the TileLayer, zoom, lat/lon, etc. for the map.
+     */
     this.__super__map__leaflet__.prototype.init.call(this);
     var myLatLng = L.latLng(this.center_lat, this.center_lon);
     var myTileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
@@ -42,11 +57,30 @@ MapLeaflet.prototype.init = function () {
     this.map.addLayer(myTileLayer);
 };
 MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
+    /*
+     * Add a Cyber Attack visualization to this map.
+     *
+     * @param attacker_lat: The latitude of the attacker. (float)
+     * @param attacker_lon: The longitude of the attacker. (float)
+     * @param target_lat: The latitude of the target. (float)
+     * @param target_lon: The longitude of the target. (float)
+     * @param info: The data corresponding to the Cyber Attack. (dict)
+     */
     this.add_pulsing_blip(attacker_lat, attacker_lon, info, 'attack', 300, 5000);
     this.add_pulsing_blip(target_lat, target_lon, info, 'target', 300, 5000);
     this.add_streaming_bits(attacker_lat, attacker_lon, target_lat, target_lon, 150, 5000);
 };
 MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_speed, time){
+    /*
+     * Add a pulsing blip to this map.
+     *
+     * @param lat: The latitude for the blip. (float)
+     * @param lon: The longitude for the blip. (float)
+     * @param info: The data corresponding to the Cyber Attack. (dict)
+     * @param type: the type of blip to add, 'attacker or 'target'. (str)
+     * @param pulse_speed: The speed at which the blip should pulse in ms. (int)
+     * @param time: The amount of time this blip should pulse for in ms. (int)
+     */
     var blips = [];
     (function (instance){
         var pulse_interval = setInterval(function(){
@@ -64,6 +98,16 @@ MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_spe
     })(this);
 };
 MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_lat, end_lon, stream_speed, time) {
+    /*
+     * Add a stream of bits to this map.
+     *
+     * @param start_lat: The latitude the stream should start at. (float)
+     * @param start_lon: The longitude the stream should start at. (float)
+     * @param end_lat: The latitude the stream should end at. (float)
+     * @param end_lon: The longitude the stream should end at. (float)
+     * @param stream_speed: The speed of the stream in ms. (int)
+     * @param time: The amount of time the stream should stream for. (int)
+     */
     (function (instance){
         var stream_interval = setInterval(function(){
             instance.add_stream_bit(start_lat, start_lon, end_lat, end_lon);
@@ -74,6 +118,14 @@ MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_la
     })(this);
 };
 MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
+    /*
+     * Add a blip to this map.
+     *
+     * @param lat: The latitude of the blip. (float)
+     * @param lon: The longitude of the blip. (float)
+     * @param info: The data to display when the blip is clicked. (dict)
+     * @param type: The type of blip this is, 'attacker' or 'target'. (str)
+     */
     var icon_id = this.next_blip_id;
     this.next_blip_id++;
     var class_type = 'attacker_blip';
@@ -125,6 +177,14 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     return blip
 };
 MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
+    /*
+     * Add a single stream bit to the map.
+     *
+     * @param start_lat: The latitude the stream bit should start at. (float)
+     * @param start_lon: The longitude the stream bit should start at. (float)
+     * @param end_lat: The latitude the stream bit should end at. (float)
+     * @param end_lon: The longitude the stream bit should end at. (float)
+     */
     var bit_id = this.next_stream_bit_id++;
     this.next_stream_bit_id++;
     var stream_bit_icon = L.divIcon({

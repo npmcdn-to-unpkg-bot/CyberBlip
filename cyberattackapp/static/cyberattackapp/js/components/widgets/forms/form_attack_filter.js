@@ -1,9 +1,20 @@
 function FormAttackFilter(selector) {
+    /*
+     * A Concrete Form widget for filtering Cyber Attacks.
+     *
+     * @param selector: The DOM element selector representing this form.
+     */
     Form.call(this, selector, 'cyberattacks', 'get', this.response_success);
 }
-FormAttackFilter.prototype = Object.create(Form.prototype);
+FormAttackFilter.prototype = Object.create(Form.prototype); /* This is a Form widget */
 FormAttackFilter.prototype.__super__form__attack__filter__ = Form;
 FormAttackFilter.prototype.init = function () {
+    /*
+     * Initialize this FormAttackFilter instance.
+     *
+     * Binds form submit to the enter key when a user is inputting filter data.
+     * Sets up background highlight on form submission.
+     */
     this.__super__form__attack__filter__.prototype.init.call(this);
     this.filtered_original_colors = {};
     (function(instance){
@@ -33,5 +44,8 @@ FormAttackFilter.prototype.init = function () {
     })(this);
 };
 FormAttackFilter.prototype.response_success = function (response) {
-    /* do nothing */
+    /*
+     * The callback function for form submission success.
+     * Does nothing.
+     */
 };
