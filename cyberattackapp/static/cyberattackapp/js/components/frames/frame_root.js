@@ -1,11 +1,22 @@
 function FrameRoot(selector){
+    /*
+    * The root Frame Component that acts as a container for all other components in the UI.
+    *
+    * @param selector: The DOM element selector representing this Frame.
+    */
     Frame.call(this, selector);
     this.timeouts = [];
     this.filter = '';
 }
-FrameRoot.prototype = Object.create(Frame.prototype);
+FrameRoot.prototype = Object.create(Frame.prototype); /* This is a Frame */
 FrameRoot.prototype.__super__frame__root = Frame;
 FrameRoot.prototype.init = function () {
+    /*
+    * Initialize this FrameRoot instance.
+    *
+    * Adds all the components of the UI to this Frame.
+    * Sets an interval to get the latest attacks from the backend and display them every minute.
+    */
     this.add_component('frame_map_container', new FrameMapContainer($('#frame_map_container')), true);
     this.add_component('frame_attack_table_container', new FrameAttackTableContainer($("#frame_attack_table_container")), true);
     this.__super__frame__root.prototype.init.call(this);
@@ -17,6 +28,17 @@ FrameRoot.prototype.init = function () {
     })(this);
 };
 FrameRoot.prototype.handle = function (event, data) {
+    /*
+    * Handle some event.
+    *
+    * Valid events:
+    *     - 'update_attacks': Get the latest attacks from the backend and display them in simulated time to the map.
+    *     - 'attack': Display an attack on the cyber attack map and add the attack to the attack table.
+    *     - 'apply_filter': Apply a filter for the attacks being shown.
+    *
+    * @param event: The event to handle. (str)
+    * @param data: The data corresponding to the event.
+    */
     if (event === 'update_attacks') {
         for (var i = 0; i < this.timeouts.length; i++){
             clearTimeout(this.timeouts[i]);
