@@ -56,6 +56,16 @@ MapLeaflet.prototype.init = function () {
     this.map = L.map(this.selector[0], options);
     this.map.addLayer(myTileLayer);
 };
+MapLeaflet.prototype.remove_layer = function(layer) {
+    /*
+     * Remove a layer from the map.
+     *
+     * Assumes the API that was used to create this objects map attribute has a 'removeLayer' method.
+     */
+    if(this.map){
+        this.map.removeLayer(layer);
+    }
+};
 MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
     /*
      * Add a Cyber Attack visualization to this map.

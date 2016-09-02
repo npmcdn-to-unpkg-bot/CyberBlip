@@ -19,16 +19,6 @@ Map.prototype.disable = function () {
 Map.prototype.enable = function () {
     /* do nothing */
 };
-Map.prototype.remove_layer = function(layer) {
-    /*
-     * Remove a layer from the map.
-     *
-     * Assumes the API that was used to create this objects map attribute has a 'removeLayer' method.
-     */
-    if(this.map){
-        this.map.removeLayer(layer);
-    }
-};
 Map.prototype.get_angle = function (lat1, lon1, lat2, lon2) {
     /*
      * Get the angle between two latitude/longitude points.
