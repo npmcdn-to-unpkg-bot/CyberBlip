@@ -1,4 +1,4 @@
-function MapLeaflet(selector, center_lat, center_lon, zoom, fixed){
+function MapCyberAttack(selector, center_lat, center_lon, zoom, fixed){
     /*
      * A Map widget using the Leaflet API.
      *
@@ -16,16 +16,16 @@ function MapLeaflet(selector, center_lat, center_lon, zoom, fixed){
     this.next_stream_bit_id = 0;
     this.locked = fixed
 }
-MapLeaflet.prototype = Object.create(Map.prototype); /* This is a Map widget */
-MapLeaflet.prototype.__super__map__leaflet__ = Map;
-MapLeaflet.prototype.init = function () {
+MapCyberAttack.prototype = Object.create(Map.prototype); /* This is a Map widget */
+MapCyberAttack.prototype.__super__map__cyberattack__ = Map;
+MapCyberAttack.prototype.init = function () {
     /*
-     * Initialize this MapLeaflet instance.
+     * Initialize this MapCyberAttack instance.
      *
      * Creates a LeafLet Map object to display within this objects selector.
      * Sets up the TileLayer, zoom, lat/lon, etc. for the map.
      */
-    this.__super__map__leaflet__.prototype.init.call(this);
+    this.__super__map__cyberattack__.prototype.init.call(this);
     var myLatLng = L.latLng(this.center_lat, this.center_lon);
     var myTileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
         "access_token=" + configs['ACCESS_TOKEN']);
@@ -56,17 +56,7 @@ MapLeaflet.prototype.init = function () {
     this.map = L.map(this.selector[0], options);
     this.map.addLayer(myTileLayer);
 };
-MapLeaflet.prototype.remove_layer = function(layer) {
-    /*
-     * Remove a layer from the map.
-     *
-     * Assumes the API that was used to create this objects map attribute has a 'removeLayer' method.
-     */
-    if(this.map){
-        this.map.removeLayer(layer);
-    }
-};
-MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
+MapCyberAttack.prototype.add_attack = function (attacker_lat, attacker_lon, target_lat, target_lon, info) {
     /*
      * Add a Cyber Attack visualization to this map.
      *
@@ -80,7 +70,7 @@ MapLeaflet.prototype.add_attack = function (attacker_lat, attacker_lon, target_l
     this.add_pulsing_blip(target_lat, target_lon, info, 'target', 300, 5000);
     this.add_streaming_bits(attacker_lat, attacker_lon, target_lat, target_lon, 150, 5000);
 };
-MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_speed, time){
+MapCyberAttack.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_speed, time){
     /*
      * Add a pulsing blip to this map.
      *
@@ -101,13 +91,13 @@ MapLeaflet.prototype.add_pulsing_blip = function(lat, lon, info, type, pulse_spe
             clearInterval(pulse_interval);
             setTimeout(function(){
                 for (var i = 0; i < blips.length; i++){
-                    instance.remove_layer(blips[i]);
+                    instance.map.removeLayer(blips[i]);
                 }
             }, time);
         }, time);
     })(this);
 };
-MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_lat, end_lon, stream_speed, time) {
+MapCyberAttack.prototype.add_streaming_bits = function (start_lat, start_lon, end_lat, end_lon, stream_speed, time) {
     /*
      * Add a stream of bits to this map.
      *
@@ -127,7 +117,7 @@ MapLeaflet.prototype.add_streaming_bits = function (start_lat, start_lon, end_la
         }, time)
     })(this);
 };
-MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
+MapCyberAttack.prototype.add_blip = function (lat, lon, info, type) {
     /*
      * Add a blip to this map.
      *
@@ -135,6 +125,7 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
      * @param lon: The longitude of the blip. (float)
      * @param info: The data to display when the blip is clicked. (dict)
      * @param type: The type of blip this is, 'attacker' or 'target'. (str)
+     * @return: Return The created blip. (L.Marker)
      */
     var icon_id = this.next_blip_id;
     this.next_blip_id++;
@@ -186,7 +177,7 @@ MapLeaflet.prototype.add_blip = function (lat, lon, info, type) {
     blip.addTo(this.map);
     return blip
 };
-MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
+MapCyberAttack.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, end_lon) {
     /*
      * Add a single stream bit to the map.
      *
@@ -214,7 +205,7 @@ MapLeaflet.prototype.add_stream_bit = function (start_lat, start_lon, end_lat, e
     );
     (function(instance){
         stream_bit_marker.on('end', function () {
-            instance.remove_layer(stream_bit_marker);
+            instance.map.removeLayer(stream_bit_marker);
         });
     })(this);
     stream_bit_marker.addTo(this.map);

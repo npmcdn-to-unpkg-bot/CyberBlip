@@ -14,7 +14,7 @@ FrameMapContainer.prototype.init = function () {
      *
      * Adds all the components of the cyber attack map to this Frame.
      */
-    this.add_component('map', new MapLeaflet($('#map'), 45.320313, -69.049089, 7, true), true);
+    this.add_component('map', new MapCyberAttack($('#map'), 45.320313, -69.049089, 7, true), true);
     this.__super__frame__map__container__.prototype.init.call(this);
 };
 FrameMapContainer.prototype.handle = function (event, data) {
