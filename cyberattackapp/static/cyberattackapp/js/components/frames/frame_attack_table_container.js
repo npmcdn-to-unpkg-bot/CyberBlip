@@ -16,10 +16,10 @@ FrameAttackTableContainer.prototype.init = function () {
      */
     this.add_component('form_attack_filter', new FormAttackFilter($("#form_attack_filter")), true);
     this.add_component('table_attack', new TableAttack($("#table_attack")), true);
-    this.add_component('table_timestamp', new TableTimeStamp($("#table_timestamp")), true);
-    this.add_component('table_attacker', new TableAttacker($("#table_attacker")), true);
-    this.add_component('table_target', new TableTarget($("#table_target")), true);
-    this.add_component('table_type', new TableType($("#table_type")), true);
+    this.add_component('table_timestamp', new TableAttackSubTable($("#table_timestamp")), true);
+    this.add_component('table_attacker', new TableAttackSubTable($("#table_attacker")), true);
+    this.add_component('table_target', new TableAttackSubTable($("#table_target")), true);
+    this.add_component('table_type', new TableAttackSubTable($("#table_type")), true);
     this.__super__frame__attacke__table__container__.prototype.init.call(this);
 
     this.hidden_rows = [];
