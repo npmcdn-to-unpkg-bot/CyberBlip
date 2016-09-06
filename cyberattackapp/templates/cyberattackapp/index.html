@@ -13,11 +13,12 @@
     <link href="{% static "cyberattackapp/css/components/frames/frame_map_container.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/components/frames/frame_attack_table_container.css" %}" rel="stylesheet" type="text/css">
     <link href="{% static "cyberattackapp/css/utility.css" %}" rel="stylesheet" type="text/css">
-    <link href="{% static "cyberattackapp/css/deps/jquery-ui.min.css" %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://npmcdn.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="{% static "cyberattackapp/js/deps/jquery-ui.min.js" %}"></script>
+    <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
     <script src="{% static "cyberattackapp/js/deps/MovingMarker.js" %}"></script>
     <script src="{% static "cyberattackapp/js/deps/jquery.pulse.js" %}"></script>
     <script src="{% static "cyberattackapp/js/utility.js" %}"></script>
@@ -35,9 +36,12 @@
     <script src="{% static "cyberattackapp/js/components/frames/frame_attack_table_container.js" %}"></script>
     <script src="{% static "cyberattackapp/js/components/frames/frame_root.js" %}"></script>
     <script src="{% static "cyberattackapp/js/main.js" %}"></script>
+    <script src="{% static "tests/setup.js" %}"></script>
+    <script src="{% static "tests/test_component.js" %}"></script>
 </head>
 <body>
     {% include "cyberattackapp/frames/frame_map_container.html" %}
     {% include "cyberattackapp/frames/frame_attack_table_container.html" %}
+    <div id="qunit-fixture"></div>
 </body>
 </html>
