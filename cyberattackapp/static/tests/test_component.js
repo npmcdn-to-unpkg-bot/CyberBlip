@@ -37,7 +37,7 @@ QUnit.module("test_component", function () {
             assert.strictEqual('1000px', component.selector.css('width'));
             assert.strictEqual('2000px', component.selector.css('height'));
             done();
-        }, 300);
+        }, 350);
     });
     QUnit.test("test_set_parent", function (assert) {
         component.set_parent(parent_component);
