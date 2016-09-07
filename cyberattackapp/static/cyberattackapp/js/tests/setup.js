@@ -22,7 +22,15 @@ QUnit.log(function (details) {
     var loc = details.module + ": " + details.name + ": ",
         output = "FAILED: " + loc + ( details.message ? details.message + ", " : "" );
     if (details.actual) {
-        output += "expected: " + details.expected + ", actual: " + details.actual;
+        var expected_string = details.expected;
+        var actual_string = details.actual;
+        if (typeof details.expected === 'object'){
+            expected_string = JSON.stringify(details.expected, null, 4)
+        }
+        if (typeof details.actual === 'object'){
+            actual_string = JSON.stringify(details.actual, null, 4)
+        }
+        output += "expected: " + expected_string + ", actual: " + actual_string;
     }
     if (details.source) {
         output += ", " + details.source;
