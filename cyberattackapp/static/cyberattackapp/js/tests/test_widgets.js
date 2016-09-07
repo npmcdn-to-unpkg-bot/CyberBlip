@@ -66,3 +66,100 @@ QUnit.module("test_form", function () {
         }, 500);
     });
 });
+QUnit.module("test_table", function () {
+    var $elem = $("<table><thead></thead><tbody></tbody></table>");
+    var table = new Table($elem);
+
+    QUnit.test("test_construct", function (assert) {
+        assert.strictEqual($elem, table.selector);
+        assert.deepEqual($elem.find('thead'), table.header);
+        assert.deepEqual($elem.find('tbody'), table.body);
+    });
+    QUnit.test("test_format_args", function (assert) {
+        var arg_strings = [];
+        table.format_args([
+            {'style': 'color:red', 'width':'20px', 'height':'100px'},
+            {'style': 'color:cyan', 'width':'50px', 'height':'200px'}], arg_strings);
+        assert.deepEqual(
+            arg_strings,
+            [
+                'style=color:red; width=20px; height=100px; ',
+                'style=color:cyan; width=50px; height=200px; '
+            ]);
+    });
+    QUnit.test("test_add_header_row", function (assert) {
+        table.add_header_row(['foo', 'bar'], [{'width':'20px', 'height':'100px'},{'width':'50px', 'height':'200px'}]);
+        var header_row = table.header.find('tr:last');
+        var cell_one = header_row.find('th:nth-child(1)');
+        var cell_two = header_row.find('th:nth-child(2)');
+
+        assert.strictEqual(cell_one.html(), 'foo');
+        assert.strictEqual(cell_one.css('width'), '20px');
+        assert.strictEqual(cell_one.css('height'), '100px');
+
+        assert.strictEqual(cell_two.html(), 'bar');
+        assert.strictEqual(cell_two.css('width'), '50px');
+        assert.strictEqual(cell_two.css('height'), '200px');
+    });
+    QUnit.test("test_add_body_row", function (assert) {
+        table.add_body_row(['foo', 'bar'], [{'width':'20px', 'height':'100px'},{'width':'50px', 'height':'200px'}]);
+        var body_row = table.body.find('tr:last');
+        var cell_one = body_row.find('td:nth-child(1)');
+        var cell_two = body_row.find('td:nth-child(2)');
+
+        assert.strictEqual(cell_one.html(), 'foo');
+        assert.strictEqual(cell_one.css('width'), '20px');
+        assert.strictEqual(cell_one.css('height'), '100px');
+
+        assert.strictEqual(cell_two.html(), 'bar');
+        assert.strictEqual(cell_two.css('width'), '50px');
+        assert.strictEqual(cell_two.css('height'), '200px');
+    });
+    QUnit.test("test_hide_body_row", function (assert) {
+        table.add_body_row(['foo']);
+        var num_rows = table.body.find('tr').length;
+        var last_row = table.body.find('tr:last');
+        assert.strictEqual(last_row.css('display'), 'table');
+        table.hide_body_row(num_rows - 1);
+        assert.strictEqual(last_row.css('display'), 'none');
+    });
+    QUnit.test("test_remove_body_row", function (assert) {
+        table.add_body_row(['foo']);
+        var num_rows = table.body.find('tr').length;
+        table.remove_body_row(num_rows - 1);
+        assert.strictEqual(table.body.find('tr').length, num_rows - 1);
+    });
+    QUnit.test("test_show_body_row", function (assert) {
+        table.add_body_row(['foo']);
+        var num_rows = table.body.find('tr').length;
+        var last_row = table.body.find('tr:last');
+        assert.strictEqual(last_row.css('display'), 'table');
+        table.hide_body_row(num_rows - 1);
+        assert.strictEqual(last_row.css('display'), 'none');
+        table.show_body_row(num_rows - 1);
+        assert.strictEqual(last_row.css('display'), 'table');
+    });
+    QUnit.test('test_clear', function (assert) {
+        table.add_body_row(['bar']);
+        assert.ok(table.body.find('tr').length > 0);
+        table.clear();
+        assert.strictEqual(table.body.find('tr').length, 0);
+    });
+});
+QUnit.module("test_map", function () {
+    var $elem = $("<div></div>");
+    var map = new Map($elem);
+
+    QUnit.test("test_construct", function(assert){
+        assert.strictEqual($elem, map.selector);
+        assert.strictEqual(null, map.map);
+    });
+    QUnit.test("test_enable", function (assert) {
+        map.enable();
+        assert.notOk(map.selector.prop('disabled'));
+    });
+    QUnit.test("test_disable", function (assert) {
+        map.disable();
+        assert.notOk(map.selector.prop('disabled'));
+    });
+});

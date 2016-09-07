@@ -90,11 +90,12 @@ Table.prototype.format_args = function (args, arg_strings) {
     var formatted_args = arg_strings;
     if(args) {
         for (var index in args){
+            formatted_args[index] = '';
             if (args.hasOwnProperty(index)){
                 for (var arg_name in args[index]){
                     if (args[index].hasOwnProperty(arg_name)) {
-                        var arg_string = String.format(String(arg_name) + '=' + String(args[index][arg_name]));
-                        formatted_args[index] = arg_string + ' ';
+                        var arg_string = String.format(String(arg_name) + '=' + String(args[index][arg_name]) + ';');
+                        formatted_args[index] += arg_string + ' ';
                     }
                 }
             }
@@ -104,7 +105,7 @@ Table.prototype.format_args = function (args, arg_strings) {
 };
 Table.prototype.clear = function () {
     /*
-     * Clear all header and body rows from this table.
+     * Clear all body rows from this table.
      */
     this.body.empty();
 };
